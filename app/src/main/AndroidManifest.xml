@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mobica.mawa.fiszki" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/FiszkiTheme" >
+        <activity
+            android:name=".MainScreen"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".quiz.QuizActivity"
+            android:theme="@style/FiszkiTheme" >
+            android:label="@string/title_activity_quiz" >
+        </activity>
+        <activity
+            android:name=".reporsitory.RepositoryListActivity"
+            android:theme="@style/FiszkiTheme" >
+            android:label="@string/title_activity_repository" >
+        </activity>
+        <activity
+            android:name=".reporsitory.RepositoryActivity"
+            android:label="@string/title_activity_repository" >
+        </activity>
+    </application>
+
+</manifest>

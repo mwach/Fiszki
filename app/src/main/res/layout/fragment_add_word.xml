@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mobica.mawa.fiszki.AddWordFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/base_word" />
+
+    <EditText
+        android:id="@+id/baseWordEditText"
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:hint="@string/base_word"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ref_word" />
+    <EditText
+        android:id="@+id/refWordEditText"
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:hint="@string/ref_word"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_triple_vertical_margin"
+        >
+
+        <ImageButton
+            android:id="@+id/addWordConfirm"
+            android:src="@drawable/ttrue"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/quizKnownResponse"
+            android:onClick="onClick"
+            android:background="@color/green"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            />
+
+        <ImageButton
+            android:id="@+id/addWordCancel"
+            android:src="@drawable/ffalse"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/quizUnknownResponse"
+            android:onClick="onClick"
+            android:background="@color/red"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            />
+</LinearLayout>
+    </LinearLayout>

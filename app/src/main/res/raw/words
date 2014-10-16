@@ -1,0 +1,8 @@
+<words>
+    <word baseWord="cat" baseLanguage="en" refWord="kot" refLanguage="pl"/>
+    <word baseWord="dog" baseLanguage="en" refWord="pies" refLanguage="pl"/>
+    <word baseWord="cow" baseLanguage="en" refWord="krowa" refLanguage="pl"/>
+    <word baseWord="bull" baseLanguage="en" refWord="byk" refLanguage="pl"/>
+    <word baseWord="fish" baseLanguage="en" refWord="ryba" refLanguage="pl"/>
+    <word baseWord="monkey" baseLanguage="en" refWord="malpa" refLanguage="pl"/>
+</words>

@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context="com.mobica.mawa.fiszki.quiz.QuizQuestionFragment">
+
+    <TextView
+        android:id="@+id/quizQuestionStatusTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/quizWordTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/activity_word_size"
+        android:gravity="center"
+        android:text="" />
+
+
+
+    <TextView
+        android:id="@+id/quizResponseTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textSize="@dimen/activity_word_size"
+        android:gravity="center"
+        android:text=""
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showAnswerButton"
+        android:onClick="showAnswer"
+
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_triple_vertical_margin"
+        >
+
+        <ImageButton
+            android:src="@drawable/ttrue"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/quizKnownResponse"
+            android:onClick="answerKnown"
+            android:background="@color/green"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            />
+
+        <ImageButton
+            android:src="@drawable/ffalse"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/quizUnknownResponse"
+            android:onClick="answerUnknown"
+            android:background="@color/red"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

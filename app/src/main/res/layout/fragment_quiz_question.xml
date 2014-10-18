@@ -58,7 +58,7 @@
         >
 
         <ImageButton
-            android:src="@drawable/ttrue"
+            android:src="@drawable/ok"
             android:layout_weight="1"
             android:layout_width="0px"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             />
 
         <ImageButton
-            android:src="@drawable/ffalse"
+            android:src="@drawable/cancel"
             android:layout_weight="1"
             android:layout_width="0px"
             android:layout_height="wrap_content"

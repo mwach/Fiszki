@@ -116,11 +116,6 @@ public class JdbcWordDAO extends SQLiteOpenHelper implements WordDAO{
         return getWordFromCursor(c);
     }
 
-    @Override
-    public void update(Word item) {
-
-    }
-
     private Cursor rawQuery(long dictionaryId) {
         // Gets the data repository in read mode
         SQLiteDatabase db = getReadableDatabase();

@@ -116,11 +116,6 @@ public class JdbcDictionaryDAO extends SQLiteOpenHelper implements DictionaryDAO
         return getDictionaryFromCursor(c);
     }
 
-    @Override
-    public void update(Dictionary item) {
-
-    }
-
     private Cursor rawQuery(int baseDictionary, int refDictionary) {
         // Gets the data repository in read mode
         SQLiteDatabase db = getReadableDatabase();

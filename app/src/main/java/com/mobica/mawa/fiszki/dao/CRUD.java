@@ -5,7 +5,9 @@ package com.mobica.mawa.fiszki.dao;
  */
 public interface CRUD<T> {
 
-    public long insert(T entry);
+    public long insert(T item);
 
-    public T get(long entryId);
+    public T delete(long id);
+
+    public T get(long id);
 }

@@ -1,6 +1,6 @@
 package com.mobica.mawa.fiszki.dto;
 
-import com.mobica.mawa.fiszki.dao.Word;
+import com.mobica.mawa.fiszki.dao.word.Word;
 
 import java.util.ArrayList;
 import java.util.List;

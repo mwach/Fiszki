@@ -1,34 +1,24 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
-
-
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.Word;
-import com.mobica.mawa.fiszki.dao.WordHelper;
-
-import org.w3c.dom.Text;
+import com.mobica.mawa.fiszki.dao.word.JdbcWordDAO;
+import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.word.WordDAO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,55 +33,49 @@ public class WordsListFragment extends Fragment {
      *
      * @return A new instance of fragment WordsListFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static WordsListFragment newInstance(String param1, String param2) {
-        WordsListFragment fragment = new WordsListFragment();
-        return fragment;
+    public static WordsListFragment newInstance(int dictionaryId) {
+        WordsListFragment wlf = new WordsListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DICTIONARY_ID, dictionaryId);
+        wlf.setArguments(bundle);
+        return wlf;
     }
+    private static final String DICTIONARY_ID = "DICTIONARY_ID";
+
     public WordsListFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_words_list, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_words_list, container, false);
 
+        final ListView listview = (ListView) rootView.findViewById(R.id.wordsList);
 
-        final ListView listview = (ListView) rootView.findViewById(R.id.dictionariesList);
+        final int dictionary = getArguments().getInt(DICTIONARY_ID);
+        List<Word> dict = loadDictionaryFromDb(dictionary);
+        populateTable(dict);
 
         adapter = new StableArrayAdapter(rootView.getContext(), ids, values);
         listview.setAdapter(adapter);
 
-
+        ImageButton button = (ImageButton)rootView.findViewById(R.id.add_word);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((RepositoryActivity)rootView.getContext()).addWord(dictionary);
+            }
+        });
         return rootView;
 }
 
     StableArrayAdapter adapter = null;
 
-    private WordHelper wordHelper = null;
-    private List<Word> loadDictionaryFromDb(String dictionary) {
-        wordHelper = WordHelper.getInstance(getActivity());
-        return wordHelper.loadDictionary(dictionary);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        List<Word> dict = loadDictionaryFromDb(dictionary);
-        populateTable(dict);
-
-    }
-
-    private String dictionary = null;
-    public void loadDictionary(String dictionary) {
-        this.dictionary = dictionary;
+    private List<Word> loadDictionaryFromDb(int dictionary) {
+        WordDAO wordDao = JdbcWordDAO.getInstance(getActivity());
+        return wordDao.query(dictionary, Constants.MAX_NO_OF_QUESTIONS);
     }
 
     private void populateTable(List<Word> dict) {
@@ -121,10 +105,6 @@ public class WordsListFragment extends Fragment {
             this.values = values;
         }
 
-        public void setValues(List<String> values){
-            this.values = values;
-        }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -133,20 +113,18 @@ public class WordsListFragment extends Fragment {
             TextView tv = (TextView)rowView.findViewById(R.id.rowlayoutTextView);
             tv.setText(values.get(position));
             ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutImageButton);
-            imageButton.setOnClickListener(new ClickListener(position, rowView));
+            imageButton.setOnClickListener(new ClickListener(position));
             return rowView;
         }
         private class ClickListener implements View.OnClickListener{
 
             private int position;
-            private View rowView;
-            public ClickListener(int position, View rowView){
+            public ClickListener(int position){
                 this.position = position;
-                this.rowView = rowView;
             }
             @Override
             public void onClick(View view) {
-                WordHelper.getInstance(getContext()).remove(ids.get(position));
+                JdbcWordDAO.getInstance(getContext()).delete(ids.get(position));
                 values.remove(position);
                 ids.remove(position);
                 notifyDataSetChanged();

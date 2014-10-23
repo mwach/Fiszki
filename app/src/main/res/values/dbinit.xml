@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="languages">
+        <item>1;EN;English</item>
+        <item>2;PL;Polish</item>
+    </string-array>
+
+    <string-array name="dictionaries">
+        <item>1;Animals;Zwierzeta;1;2</item>
+    </string-array>
+
+    <string-array name="words">
+        <item>1;1;Cat;Kot</item>
+    </string-array>
+
+
+</resources>

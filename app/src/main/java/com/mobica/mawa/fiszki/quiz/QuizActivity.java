@@ -15,8 +15,8 @@ import android.widget.Spinner;
 import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.Word;
-import com.mobica.mawa.fiszki.dao.WordHelper;
+import com.mobica.mawa.fiszki.dao.word.JdbcWordDAO;
+import com.mobica.mawa.fiszki.dao.word.Word;
 import com.mobica.mawa.fiszki.dto.WordQuiz;
 import com.mobica.mawa.fiszki.dto.WordQuizHelper;
 
@@ -51,14 +51,24 @@ public class QuizActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_home) {
-            showMainMenu(null);
+            showMainMenu();
         }else {
             return super.onOptionsItemSelected(item);
         }
         return true;
     }
 
-    public void showMainMenu(View view){
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.mainMenuButton:
+                showMainMenu();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void showMainMenu(){
         Intent mainMenuIntent = new Intent(this, MainScreen.class);
         mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainMenuIntent);
@@ -70,7 +80,7 @@ public class QuizActivity extends Activity {
     public void startQuiz(View view) {
 
         EditText noOfQuestionsEditText = (EditText)findViewById(R.id.editTextNoOfQuestions);
-        Spinner languageSpinner = (Spinner)findViewById(R.id.spinnerLanguage);
+        Spinner languageSpinner = (Spinner)findViewById(R.id.spinnerDictionaries);
 
         int noOfQuestions = Integer.parseInt(noOfQuestionsEditText.getText().toString());
         SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
@@ -78,8 +88,7 @@ public class QuizActivity extends Activity {
         editor.putInt(Constants.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
         editor.apply();
 
-        String language = languageSpinner.getSelectedItem().toString();
-        List<Word> dbWords = WordHelper.getInstance(this).getListOfQuestions(noOfQuestions, language);
+        List<Word> dbWords = JdbcWordDAO.getInstance(this).queryRandom(1, noOfQuestions);
         this.dbWords = WordQuizHelper.getList(dbWords);
         Bundle bundle = new Bundle();
         bundle.putInt("noOfQuestions", dbWords.size());

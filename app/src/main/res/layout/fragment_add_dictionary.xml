@@ -1,44 +1,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mobica.mawa.fiszki.quiz.QuizQuestionFragment">
+    tools:context="com.mobica.mawa.fiszki.reporsitory.AddDictionaryFragment">
 
     <TextView
-        android:id="@+id/quizQuestionStatusTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="" />
+        android:text="@string/directory_name" />
+
+    <EditText
+        android:id="@+id/dictionaryEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/directory_name"
+        android:inputType="text" />
 
     <TextView
-        android:id="@+id/quizWordTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=""
-        android:textSize="@dimen/activity_word_size" />
+        android:text="@string/directory_description" />
 
-
-    <TextView
-        android:id="@+id/quizResponseTextView"
+    <EditText
+        android:id="@+id/descriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=""
-        android:textSize="@dimen/activity_word_size"
-        android:visibility="invisible" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/buttonshape"
-        android:onClick="showAnswer"
-
-        android:text="@string/showAnswerButton"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp" />
+        android:hint="@string/directory_description"
+        android:inputType="text" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,6 +38,7 @@
         android:weightSum="2">
 
         <ImageButton
+            android:id="@+id/addDirectoryConfirm"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -56,10 +46,10 @@
             android:layout_weight="1"
             android:background="@color/green"
             android:contentDescription="@string/quizKnownResponse"
-            android:onClick="answerKnown"
             android:src="@drawable/ok" />
 
         <ImageButton
+            android:id="@+id/addDirectoryCancel"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -67,9 +57,7 @@
             android:layout_weight="1"
             android:background="@color/red"
             android:contentDescription="@string/quizUnknownResponse"
-            android:onClick="answerUnknown"
             android:src="@drawable/cancel" />
-
     </LinearLayout>
 
 </LinearLayout>

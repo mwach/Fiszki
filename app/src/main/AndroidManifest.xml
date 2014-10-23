@@ -18,13 +18,21 @@
         </activity>
         <activity
             android:name=".quiz.QuizActivity"
-            android:theme="@style/FiszkiTheme" >
+            android:theme="@style/FiszkiTheme"
             android:label="@string/title_activity_quiz" >
         </activity>
         <activity
             android:name=".reporsitory.RepositoryActivity"
-            android:theme="@style/FiszkiTheme" >
+            android:theme="@style/FiszkiTheme"
             android:label="@string/title_activity_repository" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 

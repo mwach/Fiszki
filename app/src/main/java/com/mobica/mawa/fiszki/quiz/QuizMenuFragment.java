@@ -15,8 +15,12 @@ import android.widget.Spinner;
 
 import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
+import com.mobica.mawa.fiszki.dao.language.JdbcLanguageDAO;
+import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,8 +40,8 @@ public class QuizMenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_quiz_menu, container, false);
 
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.spinnerLanguage);
-        populateSpinner(rootView.getContext(), spinner, getListOfLanguages());
+        Spinner spinner = (Spinner) rootView.findViewById(R.id.spinnerDictionaries);
+        populateSpinner(rootView.getContext(), spinner, getListOfDictionaries());
 
         loadFormDefaults(rootView);
 
@@ -70,8 +74,18 @@ public class QuizMenuFragment extends Fragment {
         spinner.setAdapter(adapter);
     }
 
-    private List<String> getListOfLanguages() {
-        return Arrays.asList(getString(R.string.en), getString(R.string.pl));
+    private List<String> getListOfDictionaries() {
+        String baseLanguageName = PreferencesHelper.getBaseLanguage(getActivity());
+        String refLanguageName = PreferencesHelper.getRefLanguage(getActivity());
+
+        int baseLanguage = JdbcLanguageDAO.getInstance(getActivity()).get(baseLanguageName).getId();
+        int refLanguage = JdbcLanguageDAO.getInstance(getActivity()).get(refLanguageName).getId();
+        List<Dictionary> dictionaries = JdbcDictionaryDAO.getInstance(getActivity()).query(baseLanguage, refLanguage, Constants.UNLIMITED);
+        List<String> dicts = new ArrayList<String>();
+        for (Dictionary dict : dictionaries){
+            dicts.add(dict.getName());
+        }
+        return dicts;
     }
 
 }

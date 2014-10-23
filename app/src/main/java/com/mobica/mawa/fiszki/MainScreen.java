@@ -32,28 +32,42 @@ public class MainScreen extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.menu_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.menu_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+            case R.id.menu_about:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
+                break;
+            default:
+                return false;
+            }
+        return true;
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.quizImageButton:
+            case R.id.quizTextView:
+                Intent startQuizIntent = new Intent(this, QuizActivity.class);
+                startActivity(startQuizIntent);
+                break;
+            case R.id.dictImageButton:
+            case R.id.dictTextView:
+                Intent startRepositoryIntent = new Intent(this, RepositoryActivity.class);
+                startActivity(startRepositoryIntent);
+                break;
+            case R.id.statsImageButton:
+            case R.id.statsTextView:
+                break;
+            case R.id.exitImageButton:
+            case R.id.exitTextView:
+                android.os.Process.killProcess(android.os.Process.myPid());
+                break;
+            default:
+                break;
         }
-        return super.onOptionsItemSelected(item);
     }
-
-    public void gotoQuiz(View view) {
-        Intent startQuizIntent = new Intent(this, QuizActivity.class);
-        startActivity(startQuizIntent);
-    }
-
-    public void gotoRepository(View view) {
-        Intent startRepositoryIntent = new Intent(this, RepositoryActivity.class);
-        startActivity(startRepositoryIntent);
-    }
-
-    public void gotoStats(View view) {
-    }
-
-    public void gotoQuit(View view) {
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
-
 }

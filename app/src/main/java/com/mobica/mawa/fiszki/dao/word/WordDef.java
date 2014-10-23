@@ -1,4 +1,4 @@
-package com.mobica.mawa.fiszki.dao;
+package com.mobica.mawa.fiszki.dao.word;
 
 import android.provider.BaseColumns;
 
@@ -7,8 +7,7 @@ import android.provider.BaseColumns;
  */
 public class WordDef implements BaseColumns {
         public static final String TABLE_NAME = "word";
+        public static final String COLUMN_DICTIONARY_ID = "dictionary_id";
         public static final String COLUMN_BASE_WORD = "base_word";
-        public static final String COLUMN_BASE_lANGUAGE = "base_language";
         public static final String COLUMN_REF_WORD = "ref_word";
-        public static final String COLUMN_REF_lANGUAGE = "ref_language";
 }

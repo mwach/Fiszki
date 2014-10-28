@@ -1,6 +1,7 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,16 +9,15 @@ import android.view.MenuItem;
 
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
 
-public class RepositoryActivity extends Activity {
+public class RepositoryActivity extends Activity implements Repository{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repository);
-        if (savedInstanceState == null) {
-            showDictionaries();
-        }
+        showDictionaries();
     }
 
     public void showDictionaries() {
@@ -55,6 +55,11 @@ public class RepositoryActivity extends Activity {
     }
 
 
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
     public void loadDictionary(int dictionaryId) {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, WordsListFragment.newInstance(dictionaryId))
@@ -65,6 +70,11 @@ public class RepositoryActivity extends Activity {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddWordFragment.newInstance(dictionary))
                 .commit();
+    }
+
+    @Override
+    public void deleteDictionary(int id) {
+        JdbcDictionaryDAO.getInstance(getContext()).delete(id);
     }
 
     public void addDictionary() {

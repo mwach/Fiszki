@@ -5,12 +5,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mobica.mawa.fiszki.R;
 
 public class QuizQuestionFragment extends Fragment implements QuestionFragmentInterface{
-
 
     private int numberOfQuestions = 0;
 
@@ -31,10 +31,9 @@ public class QuizQuestionFragment extends Fragment implements QuestionFragmentIn
         view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
 
         if(getArguments() != null){
-            numberOfQuestions = getArguments().getInt("noOfQuestions");
-            setCurrentQuestionId(getArguments().getInt("currentQuestionId"));
-            setCurrentWord(getArguments().getString("currentWord"));
-            //bundle.putString("currentWord", "word");
+            numberOfQuestions = getArguments().getInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS);
+            setCurrentQuestionId(getArguments().getInt(QuestionFragmentInterface.CURRENT_QUESTION_ID));
+            setCurrentWord(getArguments().getString(QuestionFragmentInterface.CURRENT_WORD));
         }
 
         return view;
@@ -49,6 +48,9 @@ public class QuizQuestionFragment extends Fragment implements QuestionFragmentIn
 
         TextView tv2 = (TextView) view.findViewById(R.id.quizResponseTextView);
         tv2.setVisibility(View.INVISIBLE);
+
+        Button button = (Button)view.findViewById(R.id.quizResponseButton);
+        button.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -67,16 +69,14 @@ public class QuizQuestionFragment extends Fragment implements QuestionFragmentIn
         TextView tv = (TextView) view.findViewById(R.id.quizResponseTextView);
         tv.setText(wordResponse);
         tv.setVisibility(View.VISIBLE);
+
+        Button button = (Button)view.findViewById(R.id.quizResponseButton);
+        button.setVisibility(View.GONE);
     }
 
     @Override
-    public boolean isAnswerKnown() {
-        return false;
+    public void setNumberOfQuestions(int size) {
+
     }
 
-    public void setResponseWord(String responseWord) {
-        TextView tv = (TextView) view.findViewById(R.id.quizResponseTextView);
-        tv.setVisibility(View.VISIBLE);
-        tv.setText(responseWord);
-    }
 }

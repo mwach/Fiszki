@@ -24,7 +24,7 @@
         <activity
             android:name=".reporsitory.RepositoryActivity"
             android:theme="@style/FiszkiTheme"
-            android:label="@string/title_activity_repository" >
+            android:label="@string/available_dictionaries" >
         </activity>
         <activity
             android:name=".SettingsActivity"

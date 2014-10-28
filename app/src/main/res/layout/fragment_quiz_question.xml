@@ -3,12 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.mobica.mawa.fiszki.quiz.QuizQuestionFragment">
 
     <TextView
         android:id="@+id/quizQuestionStatusTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/activity_word_small_size_xx"
         android:text="" />
 
     <TextView
@@ -16,29 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text=""
         android:textSize="@dimen/activity_word_size" />
-
-
-    <TextView
-        android:id="@+id/quizResponseTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=""
-        android:textSize="@dimen/activity_word_size"
-        android:visibility="invisible" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/buttonshape"
-        android:onClick="showAnswer"
-
-        android:text="@string/showAnswerButton"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,6 +30,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/activity_triple_vertical_margin"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:weightSum="2">
 
         <ImageButton
@@ -69,7 +54,29 @@
             android:contentDescription="@string/quizUnknownResponse"
             android:onClick="answerUnknown"
             android:src="@drawable/cancel" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/quizResponseButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/buttonshape"
+        android:onClick="showAnswer"
+        android:layout_marginTop="@dimen/activity_triple_vertical_margin"
+        android:text="@string/showAnswerButton"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/activity_word_small_size" />
+
+    <TextView
+        android:id="@+id/quizResponseTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=""
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:textSize="@dimen/activity_word_size"
+        android:visibility="gone" />
+
 
 </LinearLayout>

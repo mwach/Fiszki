@@ -1,5 +1,6 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -40,10 +41,24 @@ public class WordsListFragment extends Fragment {
         wlf.setArguments(bundle);
         return wlf;
     }
+
+    private Repository repository;
+    public void setRepository(Repository repository){
+        this.repository = repository;
+    }
+    public Repository getRepository(){
+        return repository;
+    }
     private static final String DICTIONARY_ID = "DICTIONARY_ID";
 
     public WordsListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setRepository((Repository)activity);
     }
 
     @Override
@@ -65,7 +80,7 @@ public class WordsListFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((RepositoryActivity)rootView.getContext()).addWord(dictionary);
+                getRepository().addWord(dictionary);
             }
         });
         return rootView;

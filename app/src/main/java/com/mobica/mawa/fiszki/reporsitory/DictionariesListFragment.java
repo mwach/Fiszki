@@ -1,5 +1,6 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,9 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link DictionariesListFragment#newInstance} factory method to
- * create an instance of this fragment.
  *
  */
 public class DictionariesListFragment extends Fragment {
@@ -32,11 +30,27 @@ public class DictionariesListFragment extends Fragment {
      * this fragment using the provided parameters.
      */
     public static DictionariesListFragment newInstance() {
-        return new DictionariesListFragment();
+
+        DictionariesListFragment dlf = new DictionariesListFragment();
+        return dlf;
+    }
+
+    private  Repository repository;
+    private void setRepository(Repository repository){
+        this.repository = repository;
+    }
+    private Repository getRepository(){
+        return repository;
     }
 
     public DictionariesListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setRepository((Repository)activity);
     }
 
     @Override
@@ -61,7 +75,7 @@ public class DictionariesListFragment extends Fragment {
                 values.add(dict.getName());
                 ids.add(dict.getId());
             }
-            final DefaultArrayAdapter adapter = new DefaultArrayAdapter(getActivity(), ids, values);
+            final DefaultArrayAdapter adapter = new DefaultArrayAdapter(repository, ids, values);
             listview.setAdapter(adapter);
 
             ImageButton addDictButton = (ImageButton) rootView.findViewById(R.id.add_dictionary);

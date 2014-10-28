@@ -2,9 +2,7 @@ package com.mobica.mawa.fiszki.quiz;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,18 +10,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
 import com.mobica.mawa.fiszki.dao.word.JdbcWordDAO;
 import com.mobica.mawa.fiszki.dao.word.Word;
-import com.mobica.mawa.fiszki.dto.WordQuiz;
-import com.mobica.mawa.fiszki.dto.WordQuizHelper;
+import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.List;
 
 
 public class QuizActivity extends Activity {
+
+    int correctAnswers = 0;
+    QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
+    List<Word> dbWords = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,13 @@ public class QuizActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_home) {
-            showMainMenu();
-        }else {
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.action_home:
+                showMainMenu();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return true;
     }
 
     public void onClick(View view) {
@@ -74,26 +76,23 @@ public class QuizActivity extends Activity {
         startActivity(mainMenuIntent);
     }
 
-    QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
-    List<WordQuiz> dbWords = null;
-
     public void startQuiz(View view) {
 
         EditText noOfQuestionsEditText = (EditText)findViewById(R.id.editTextNoOfQuestions);
-        Spinner languageSpinner = (Spinner)findViewById(R.id.spinnerDictionaries);
-
         int noOfQuestions = Integer.parseInt(noOfQuestionsEditText.getText().toString());
-        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Constants.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
-        editor.apply();
+        PreferencesHelper.setProperty(this, PreferencesHelper.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
 
-        List<Word> dbWords = JdbcWordDAO.getInstance(this).queryRandom(1, noOfQuestions);
-        this.dbWords = WordQuizHelper.getList(dbWords);
+        Spinner dictionarySpinner = (Spinner)findViewById(R.id.spinnerDictionaries);
+        Dictionary selectedDict = (Dictionary)dictionarySpinner.getSelectedItem();
+
+        dbWords = JdbcWordDAO.getInstance(this).queryRandom(selectedDict.getId(), noOfQuestions);
+
         Bundle bundle = new Bundle();
-        bundle.putInt("noOfQuestions", dbWords.size());
-        bundle.putInt("currentQuestionId", 0);
-        bundle.putString("currentWord", dbWords.isEmpty() ? "" : dbWords.get(0).getBaseWord());
+        bundle.putInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, dbWords.size());
+        bundle.putInt(QuestionFragmentInterface.CURRENT_QUESTION_ID, 0);
+        bundle.putString(QuestionFragmentInterface.CURRENT_WORD, dbWords.get(0).getBaseWord());
+
+
         ((Fragment)quizQuestionFragment).setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, (Fragment)quizQuestionFragment)
@@ -102,12 +101,12 @@ public class QuizActivity extends Activity {
 
 
     public void showAnswer(View view) {
-        quizQuestionFragment.setCurrentWordResponse(dbWords.get(0).getRefWord());
+        quizQuestionFragment.setCurrentWordResponse(dbWords.get(quizQuestionFragment.getCurrentQuestionId()).getRefWord());
 
     }
 
     public void answerKnown(View view) {
-        dbWords.get(quizQuestionFragment.getCurrentQuestionId()).setKnown(true);
+        correctAnswers++;
         showNextWord();
     }
 
@@ -125,41 +124,13 @@ public class QuizActivity extends Activity {
     private void showTestSummary() {
         QuizSummary quizSummary = new QuizSummary();
         Bundle bundle = new Bundle();
-        bundle.putStringArray(Constants.SUMMARY_LIST_OF_WORDS, getListOfWords(dbWords));
-        bundle.putBooleanArray(Constants.SUMMARY_LIST_OF_ANSWERS, getListOfAnswers(dbWords));
-        int correctAnswers = getNumberOfCorrectAnswers(dbWords);
-        bundle.putInt(Constants.QUIZ_CORRECT_ANSWERS, correctAnswers);
-        bundle.putInt(Constants.QUIZ_NO_OF_QUESTIONS, dbWords.size());
-        bundle.putInt(Constants.QUIZ_RATIO, (100 * correctAnswers / dbWords.size()));
-        bundle.putBooleanArray(Constants.SUMMARY_LIST_OF_ANSWERS, getListOfAnswers(dbWords));
+        bundle.putInt(QuestionFragmentInterface.QUIZ_CORRECT_ANSWERS, correctAnswers);
+        bundle.putInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, dbWords.size());
+        bundle.putInt(QuestionFragmentInterface.QUIZ_RATIO, (100 * correctAnswers / dbWords.size()));
         quizSummary.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, quizSummary)
                 .commit();
-    }
-
-    private int getNumberOfCorrectAnswers(List<WordQuiz> dbWords) {
-        int count = 0;
-        for(WordQuiz wordQuiz : dbWords){
-            count += wordQuiz.isKnown() ? 1 : 0;
-        }
-        return count;
-    }
-
-    private String[] getListOfWords(List<WordQuiz> dbWords) {
-        String[] array = new String[dbWords.size()];
-        for(int i=0 ; i<dbWords.size(); i++){
-            array[i] = dbWords.get(i).getBaseWord();
-        }
-        return array;
-    }
-
-    private boolean[] getListOfAnswers(List<WordQuiz> dbWords) {
-        boolean[] array = new boolean[dbWords.size()];
-        for(int i=0 ; i<dbWords.size(); i++){
-            array[i] = dbWords.get(i).isKnown();
-        }
-        return array;
     }
 
     public void answerUnknown(View view) {

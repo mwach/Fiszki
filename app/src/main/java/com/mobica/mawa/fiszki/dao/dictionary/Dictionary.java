@@ -61,4 +61,9 @@ public class Dictionary {
     public void setRefLanguage(int refLanguage) {
         this.refLanguage = refLanguage;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

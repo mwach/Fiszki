@@ -37,9 +37,9 @@ public class QuizSummary extends Fragment {
     }
 
     private void populateFragment(View rootView, Bundle arguments) {
-        int correctAnswers = arguments.getInt(Constants.QUIZ_CORRECT_ANSWERS, 0);
-        int totalQuestions = arguments.getInt(Constants.QUIZ_NO_OF_QUESTIONS, 0);
-        int ratio = arguments.getInt(Constants.QUIZ_RATIO, 0);
+        int correctAnswers = arguments.getInt(QuestionFragmentInterface.QUIZ_CORRECT_ANSWERS, 0);
+        int totalQuestions = arguments.getInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, 0);
+        int ratio = arguments.getInt(QuestionFragmentInterface.QUIZ_RATIO, 0);
 
         ((TextView)rootView.findViewById(R.id.textViewCorrectAnswers)).setText(String.valueOf(correctAnswers));
         ((TextView)rootView.findViewById(R.id.textViewNoOfQuestions)).setText(String.valueOf(totalQuestions));

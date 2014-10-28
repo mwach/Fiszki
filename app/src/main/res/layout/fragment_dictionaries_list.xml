@@ -9,24 +9,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mobica.mawa.fiszki.reporsitory.DictionariesListFragment">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:text="@string/available_dictionaries"
-        android:textSize="@dimen/activity_word_small_size" />
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/add"
         android:id="@+id/add_dictionary"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:background="@null"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"
         android:text="@string/add_dictionary"
+        android:contentDescription="@string/add_dictionary"
         />
-
 
     <ListView
         android:id="@+id/dictionariesList"

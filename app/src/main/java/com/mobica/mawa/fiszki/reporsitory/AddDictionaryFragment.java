@@ -2,6 +2,7 @@ package com.mobica.mawa.fiszki.reporsitory;
 
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
@@ -25,6 +26,7 @@ import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 public class AddDictionaryFragment extends Fragment {
 
     public static Fragment newInstance() {
+        AddDictionaryFragment addDictionaryFragment = new AddDictionaryFragment();
         return new AddDictionaryFragment();
     }
 
@@ -32,6 +34,12 @@ public class AddDictionaryFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setRepository((Repository)activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,9 +96,18 @@ public class AddDictionaryFragment extends Fragment {
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((RepositoryActivity)rootView.getContext()).showDictionaries();
+                getRepository().showDictionaries();
             }
         });
         return rootView;
     }
+
+    private Repository repository;
+    public void setRepository(Repository repository) {
+        this.repository = repository;
+    }
+    public Repository getRepository() {
+        return  repository;
+    }
+
 }

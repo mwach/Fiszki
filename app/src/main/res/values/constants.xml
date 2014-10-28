@@ -2,4 +2,5 @@
 <resources>
     <string name="baseLanguage">EN</string>
     <string name="refLanguage">PL</string>
+    <string name="noOfQuestions">20</string>
 </resources>

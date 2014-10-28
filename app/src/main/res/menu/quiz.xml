@@ -6,5 +6,5 @@
         android:title="@string/home"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-    />
+        />
 </menu>

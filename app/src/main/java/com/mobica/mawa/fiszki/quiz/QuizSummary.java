@@ -1,21 +1,18 @@
 package com.mobica.mawa.fiszki.quiz;
 
 
-
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
- *
  */
 public class QuizSummary extends Fragment {
 
@@ -33,7 +30,7 @@ public class QuizSummary extends Fragment {
 
         populateFragment(summaryView, getArguments());
 
-        return  summaryView;
+        return summaryView;
     }
 
     private void populateFragment(View rootView, Bundle arguments) {
@@ -41,8 +38,8 @@ public class QuizSummary extends Fragment {
         int totalQuestions = arguments.getInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, 0);
         int ratio = arguments.getInt(QuestionFragmentInterface.QUIZ_RATIO, 0);
 
-        ((TextView)rootView.findViewById(R.id.textViewCorrectAnswers)).setText(String.valueOf(correctAnswers));
-        ((TextView)rootView.findViewById(R.id.textViewNoOfQuestions)).setText(String.valueOf(totalQuestions));
-        ((TextView)rootView.findViewById(R.id.textViewRatio)).setText(String.format(getString(R.string.ratio_pct), ratio));
+        ((TextView) rootView.findViewById(R.id.textViewCorrectAnswers)).setText(String.valueOf(correctAnswers));
+        ((TextView) rootView.findViewById(R.id.textViewNoOfQuestions)).setText(String.valueOf(totalQuestions));
+        ((TextView) rootView.findViewById(R.id.textViewRatio)).setText(String.format(getString(R.string.ratio_pct), ratio));
     }
 }

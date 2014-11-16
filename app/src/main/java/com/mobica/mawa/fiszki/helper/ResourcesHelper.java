@@ -15,11 +15,14 @@ public class ResourcesHelper {
 
     public static Dictionary getDictionary(String dictionary) {
         String[] tokens = dictionary.split(";");
-        return new Dictionary(Integer.parseInt(tokens[0]), tokens[1], tokens[2], Integer.parseInt(tokens[3]), Integer.parseInt(tokens[4]));
+        return new Dictionary(Integer.parseInt(tokens[0]), tokens[1], tokens[2],
+                new Language(Integer.parseInt(tokens[3]), null, null),
+                new Language(Integer.parseInt(tokens[4]), null, null));
     }
 
     public static Word getWord(String word) {
         String[] tokens = word.split(";");
-        return new Word(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), tokens[2], tokens[3]);
+        return new Word(Integer.parseInt(tokens[0]),
+                new Dictionary(Integer.parseInt(tokens[1]), null, null, null, null), tokens[2], tokens[3]);
     }
 }

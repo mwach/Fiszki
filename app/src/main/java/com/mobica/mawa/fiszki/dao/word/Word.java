@@ -1,39 +1,50 @@
 package com.mobica.mawa.fiszki.dao.word;
 
-/**
- * Created by mawa on 2014-10-02.
- */
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+
+@DatabaseTable(tableName = "word")
 public class Word {
 
-    private long id;
-    private int dictionaryId;
+    static final String ID = "id";
+    static final String DICT = "dict";
+    static final String BASE_WORD = "base_word";
+    static final String REF_WORD = "ref_word";
+
+    @DatabaseField(generatedId = true, columnName = ID)
+    private int id;
+    @DatabaseField(canBeNull = false, foreign = true, columnName = DICT)
+    private Dictionary dictionary;
+    @DatabaseField(canBeNull = false, columnName = BASE_WORD)
     private String baseWord;
+    @DatabaseField(canBeNull = false, columnName = REF_WORD)
     private String refWord;
 
-    public Word(){
+    public Word() {
     }
 
-    public Word(long id, int dictionaryId, String baseWord, String refWord){
+    public Word(int id, Dictionary dictionary, String baseWord, String refWord) {
         setId(id);
-        setDictionaryId(dictionaryId);
+        setDictionary(dictionary);
         setBaseWord(baseWord);
         setRefWord(refWord);
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getDictionaryId() {
-        return dictionaryId;
+    public Dictionary getDictionary() {
+        return dictionary;
     }
 
-    public void setDictionaryId(int dictionaryId) {
-        this.dictionaryId = dictionaryId;
+    public void setDictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
     }
 
     public String getBaseWord() {
@@ -57,7 +68,7 @@ public class Word {
     public String toString() {
         return "Word{" +
                 "id='" + id + '\'' +
-                "dictionaryId='" + dictionaryId + '\'' +
+                "dictionary='" + dictionary + '\'' +
                 "baseWord='" + baseWord + '\'' +
                 ", refWord='" + refWord + '\'' +
                 '}';

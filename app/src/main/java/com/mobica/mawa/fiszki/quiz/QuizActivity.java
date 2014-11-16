@@ -13,9 +13,10 @@ import android.widget.Spinner;
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
-import com.mobica.mawa.fiszki.dao.word.JdbcWordDAO;
+import com.mobica.mawa.fiszki.dao.dictionary.DictionaryDao;
+import com.mobica.mawa.fiszki.dao.language.LanguageDao;
 import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.word.WordDao;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.List;
@@ -26,6 +27,48 @@ public class QuizActivity extends Activity {
     int correctAnswers = 0;
     QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
     List<Word> dbWords = null;
+
+    private LanguageDao languageDao = null;
+    private DictionaryDao dictionaryDao = null;
+    private WordDao wordDao = null;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (languageDao != null) {
+            languageDao.close();
+            languageDao = null;
+        }
+        if (dictionaryDao != null) {
+            dictionaryDao.close();
+            dictionaryDao = null;
+        }
+    }
+
+    private LanguageDao getLanguageDao() {
+        if (languageDao == null) {
+            languageDao =
+                    LanguageDao.getLanguageDao(this);
+        }
+        return languageDao;
+    }
+
+    private DictionaryDao getDictionaryDao() {
+        if (dictionaryDao == null) {
+            dictionaryDao =
+                    DictionaryDao.getDictionaryDao(this);
+        }
+        return dictionaryDao;
+    }
+
+    private WordDao getWordDao() {
+        if (wordDao == null) {
+            wordDao =
+                    WordDao.getWordDao(this);
+        }
+        return wordDao;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +94,7 @@ public class QuizActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_home:
                 showMainMenu();
                 return true;
@@ -61,7 +104,7 @@ public class QuizActivity extends Activity {
     }
 
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.mainMenuButton:
                 showMainMenu();
                 break;
@@ -70,7 +113,7 @@ public class QuizActivity extends Activity {
         }
     }
 
-    public void showMainMenu(){
+    public void showMainMenu() {
         Intent mainMenuIntent = new Intent(this, MainScreen.class);
         mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainMenuIntent);
@@ -78,14 +121,14 @@ public class QuizActivity extends Activity {
 
     public void startQuiz(View view) {
 
-        EditText noOfQuestionsEditText = (EditText)findViewById(R.id.editTextNoOfQuestions);
+        EditText noOfQuestionsEditText = (EditText) findViewById(R.id.editTextNoOfQuestions);
         int noOfQuestions = Integer.parseInt(noOfQuestionsEditText.getText().toString());
         PreferencesHelper.setProperty(this, PreferencesHelper.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
 
-        Spinner dictionarySpinner = (Spinner)findViewById(R.id.spinnerDictionaries);
-        Dictionary selectedDict = (Dictionary)dictionarySpinner.getSelectedItem();
+        Spinner dictionarySpinner = (Spinner) findViewById(R.id.spinnerDictionaries);
+        Dictionary selectedDict = (Dictionary) dictionarySpinner.getSelectedItem();
 
-        dbWords = JdbcWordDAO.getInstance(this).queryRandom(selectedDict.getId(), noOfQuestions);
+        dbWords = getWordDao().queryRandom(selectedDict.getId(), noOfQuestions);
 
         Bundle bundle = new Bundle();
         bundle.putInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, dbWords.size());
@@ -93,9 +136,9 @@ public class QuizActivity extends Activity {
         bundle.putString(QuestionFragmentInterface.CURRENT_WORD, dbWords.get(0).getBaseWord());
 
 
-        ((Fragment)quizQuestionFragment).setArguments(bundle);
+        ((Fragment) quizQuestionFragment).setArguments(bundle);
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, (Fragment)quizQuestionFragment)
+                .replace(R.id.container, (Fragment) quizQuestionFragment)
                 .commit();
     }
 
@@ -112,11 +155,11 @@ public class QuizActivity extends Activity {
 
     private void showNextWord() {
         int wordId = quizQuestionFragment.getCurrentQuestionId();
-        if((wordId + 1) < dbWords.size()){
+        if ((wordId + 1) < dbWords.size()) {
             wordId++;
             quizQuestionFragment.setCurrentQuestionId(wordId);
             quizQuestionFragment.setCurrentWord(dbWords.get(wordId).getBaseWord());
-        }else{
+        } else {
             showTestSummary();
         }
     }
@@ -135,5 +178,19 @@ public class QuizActivity extends Activity {
 
     public void answerUnknown(View view) {
         showNextWord();
+    }
+
+    public int getBaseLanguage() {
+        return getLanguageDao().getBaseLanguage().getId();
+    }
+
+    public int getRefLanguage() {
+        return getLanguageDao().getRefLanguage().getId();
+    }
+
+    public List<Dictionary> getListOfDictionaries() {
+        int baseLanguage = getBaseLanguage();
+        int refLanguage = getRefLanguage();
+        return getDictionaryDao().getListOfDictionaries(baseLanguage, refLanguage);
     }
 }

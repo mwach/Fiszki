@@ -10,8 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.mobica.mawa.fiszki.dao.language.JdbcLanguageDAO;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.mobica.mawa.fiszki.dao.language.Language;
+import com.mobica.mawa.fiszki.dao.language.LanguageDao;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.ArrayList;
@@ -19,6 +20,25 @@ import java.util.List;
 
 
 public class SettingsActivity extends Activity {
+
+    private LanguageDao languageDao = null;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (languageDao != null) {
+            languageDao.close();
+            languageDao = null;
+        }
+    }
+
+    private LanguageDao getLanguageDao() {
+        if (languageDao == null) {
+            languageDao =
+                    OpenHelperManager.getHelper(this, LanguageDao.class);
+        }
+        return languageDao;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +74,14 @@ public class SettingsActivity extends Activity {
 
     private List<String> getListOfDictionaries() {
 
-        List<Language> definedLanguages = JdbcLanguageDAO.getInstance(this).query(Constants.UNLIMITED);
+//        List<Language> definedLanguages = JdbcLanguageDAO.getInstance(this).query(Constants.UNLIMITED);
+        List<Language> definedLanguages = getLanguageDao().queryForAll();
         List<String> languages = new ArrayList<String>();
-        for (Language lang : definedLanguages){
+        for (Language lang : definedLanguages) {
             languages.add(lang.getName());
         }
         return languages;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -76,18 +96,19 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    private class SpinnerListener implements AdapterView.OnItemSelectedListener{
+    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
 
         private Activity activity;
         private String propertyName;
 
-        public SpinnerListener(Activity activity, String propertyName){
+        public SpinnerListener(Activity activity, String propertyName) {
             this.activity = activity;
             this.propertyName = propertyName;
         }
+
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String selectedLanguage = ((TextView)view).getText().toString();
+            String selectedLanguage = ((TextView) view).getText().toString();
             PreferencesHelper.setProperty(activity, propertyName, selectedLanguage);
         }
 

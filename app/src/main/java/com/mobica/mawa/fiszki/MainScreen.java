@@ -32,7 +32,7 @@ public class MainScreen extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
@@ -43,12 +43,12 @@ public class MainScreen extends Activity {
                 break;
             default:
                 return false;
-            }
+        }
         return true;
     }
 
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.quizImageButton:
             case R.id.quizTextView:
                 Intent startQuizIntent = new Intent(this, QuizActivity.class);

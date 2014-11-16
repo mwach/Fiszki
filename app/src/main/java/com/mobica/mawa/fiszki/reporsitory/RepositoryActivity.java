@@ -9,9 +9,61 @@ import android.view.MenuItem;
 
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
+import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.dictionary.DictionaryDao;
+import com.mobica.mawa.fiszki.dao.language.Language;
+import com.mobica.mawa.fiszki.dao.language.LanguageDao;
+import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.word.WordDao;
 
-public class RepositoryActivity extends Activity implements Repository{
+import java.util.List;
+
+public class RepositoryActivity extends Activity implements Repository {
+
+    private LanguageDao languageDao = null;
+    private DictionaryDao dictionaryDao = null;
+    private WordDao wordDao = null;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (languageDao != null) {
+            languageDao.close();
+            languageDao = null;
+        }
+        if (dictionaryDao != null) {
+            dictionaryDao.close();
+            dictionaryDao = null;
+        }
+        if (wordDao != null) {
+            wordDao.close();
+            wordDao = null;
+        }
+    }
+
+    private LanguageDao getLanguageDao() {
+        if (languageDao == null) {
+            languageDao =
+                    LanguageDao.getLanguageDao(this);
+        }
+        return languageDao;
+    }
+
+    private DictionaryDao getDictionaryDao() {
+        if (dictionaryDao == null) {
+            dictionaryDao =
+                    DictionaryDao.getDictionaryDao(this);
+        }
+        return dictionaryDao;
+    }
+
+    private WordDao getWordDao() {
+        if (wordDao == null) {
+            wordDao =
+                    WordDao.getWordDao(this);
+        }
+        return wordDao;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +100,7 @@ public class RepositoryActivity extends Activity implements Repository{
         }
     }
 
-    public void showMainMenu(){
+    public void showMainMenu() {
         Intent mainMenuIntent = new Intent(this, MainScreen.class);
         mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainMenuIntent);
@@ -66,7 +118,7 @@ public class RepositoryActivity extends Activity implements Repository{
                 .commit();
     }
 
-    public void addWord(int dictionary) {
+    public void showAddWord(int dictionary) {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddWordFragment.newInstance(dictionary))
                 .commit();
@@ -74,12 +126,50 @@ public class RepositoryActivity extends Activity implements Repository{
 
     @Override
     public void deleteDictionary(int id) {
-        JdbcDictionaryDAO.getInstance(getContext()).delete(id);
+        //JdbcDictionaryDAO.getInstance(getContext()).delete(id);
     }
 
-    public void addDictionary() {
+    @Override
+    public void deleteWord(int id) {
+        getWordDao().delete(id);
+
+    }
+
+    public void showAddDictionary() {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddDictionaryFragment.newInstance())
                 .commit();
     }
+
+    public void addDictionary(Dictionary dictionary) {
+        dictionary.setBaseLanguage(new Language(getBaseLanguage(), null, null));
+        dictionary.setRefLanguage(new Language(getRefLanguage(), null, null));
+        getDictionaryDao().add(dictionary);
+    }
+
+    @Override
+    public void addWord(Word word) {
+        getWordDao().add(word);
+    }
+
+    @Override
+    public int getBaseLanguage() {
+        return getLanguageDao().getBaseLanguage().getId();
+    }
+
+    @Override
+    public int getRefLanguage() {
+        return getLanguageDao().getRefLanguage().getId();
+    }
+
+    @Override
+    public List<Dictionary> getListOfDictionaries() {
+        return getDictionaryDao().getListOfDictionaries(getBaseLanguage(), getRefLanguage());
+    }
+
+    @Override
+    public List<Word> loadDictWords(int dictionary) {
+        return getWordDao().load(dictionary);
+    }
+
 }

@@ -1,8 +1,9 @@
 package com.mobica.mawa.fiszki.quiz;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.dictionary.JdbcDictionaryDAO;
-import com.mobica.mawa.fiszki.dao.language.JdbcLanguageDAO;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.List;
@@ -22,13 +20,20 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- *
  */
 public class QuizMenuFragment extends Fragment {
 
 
+    private QuizActivity activity = null;
+
     public QuizMenuFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (QuizActivity) activity;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class QuizMenuFragment extends Fragment {
         populateSpinner(rootView.getContext(), spinner, getListOfDictionaries());
 
         int noOfQuestions = PreferencesHelper.getNumberOfQuestions(getActivity());
-        EditText et = (EditText)rootView.findViewById(R.id.editTextNoOfQuestions);
+        EditText et = (EditText) rootView.findViewById(R.id.editTextNoOfQuestions);
         et.setText(String.valueOf(noOfQuestions));
 
         return rootView;
@@ -57,12 +62,8 @@ public class QuizMenuFragment extends Fragment {
     }
 
     private List<Dictionary> getListOfDictionaries() {
-        String baseLanguageName = PreferencesHelper.getBaseLanguage(getActivity());
-        String refLanguageName = PreferencesHelper.getRefLanguage(getActivity());
 
-        int baseLanguage = JdbcLanguageDAO.getInstance(getActivity()).get(baseLanguageName).getId();
-        int refLanguage = JdbcLanguageDAO.getInstance(getActivity()).get(refLanguageName).getId();
-        return  JdbcDictionaryDAO.getInstance(getActivity()).query(baseLanguage, refLanguage, Constants.UNLIMITED);
+        return activity.getListOfDictionaries();
     }
 
 }

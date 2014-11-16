@@ -22,12 +22,15 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
     private final Repository repository;
     private List<Integer> ids;
     private List<String> values;
+    private AdapterClickListener adapterClickListener;
 
-    public DefaultArrayAdapter(Repository repository, List<Integer> ids, List<String> values) {
+    public DefaultArrayAdapter(Repository repository, List<Integer> ids, List<String> values,
+                               AdapterClickListener adapterClickListener) {
         super(repository.getContext(), R.layout.rowlayout, values);
         this.repository = repository;
         this.ids = ids;
         this.values = values;
+        this.adapterClickListener = adapterClickListener;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void setRowBackgroundColor(View rowView, int position) {
         int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             //noinspection deprecation
             rowView.setBackgroundDrawable(repository.getContext().getResources().getDrawable(((position % 2) == 1) ? R.color.lightblue : R.color.darklightblue));
         } else {
@@ -60,27 +63,29 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
     private class OpenClickListener implements View.OnClickListener {
 
         private int position;
+
         public OpenClickListener(int position) {
             this.position = position;
         }
 
         @Override
         public void onClick(View view) {
-            int dictionaryId = ids.get(position);
-            repository.loadDictionary(dictionaryId);
+            int itemId = ids.get(position);
+            adapterClickListener.textClicked(itemId);
         }
     }
 
     private class DeleteClickListener implements View.OnClickListener {
 
         private int position;
+
         public DeleteClickListener(int position) {
             this.position = position;
         }
 
         @Override
         public void onClick(View view) {
-            repository.deleteDictionary(ids.get(position));
+            adapterClickListener.buttonClicked(ids.get(position));
             values.remove(position);
             ids.remove(position);
             notifyDataSetChanged();

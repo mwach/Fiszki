@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="appName">Fiszki</string>
     <string name="baseLanguage">EN</string>
     <string name="refLanguage">PL</string>
     <string name="noOfQuestions">20</string>

@@ -1,33 +1,32 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.mobica.mawa.fiszki.Constants;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.word.JdbcWordDAO;
+import com.mobica.mawa.fiszki.common.AdapterClickListener;
+import com.mobica.mawa.fiszki.common.DefaultArrayAdapter;
 import com.mobica.mawa.fiszki.dao.word.Word;
-import com.mobica.mawa.fiszki.dao.word.WordDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link WordsListFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
  */
-public class WordsListFragment extends Fragment {
+public class WordsListFragment extends Fragment implements AdapterClickListener {
+    private static final String DICTIONARY_ID = "DICTIONARY_ID";
+    private Repository repository;
+
+    public WordsListFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -42,23 +41,18 @@ public class WordsListFragment extends Fragment {
         return wlf;
     }
 
-    private Repository repository;
-    public void setRepository(Repository repository){
-        this.repository = repository;
-    }
-    public Repository getRepository(){
+    private Repository getRepository() {
         return repository;
     }
-    private static final String DICTIONARY_ID = "DICTIONARY_ID";
 
-    public WordsListFragment() {
-        // Required empty public constructor
+    private void setRepository(Repository repository) {
+        this.repository = repository;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        setRepository((Repository)activity);
+        setRepository((Repository) activity);
     }
 
     @Override
@@ -67,83 +61,42 @@ public class WordsListFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_words_list, container, false);
 
+        getActivity().getActionBar().setTitle(R.string.available_words);
+
         final ListView listview = (ListView) rootView.findViewById(R.id.wordsList);
 
         final int dictionary = getArguments().getInt(DICTIONARY_ID);
-        List<Word> dict = loadDictionaryFromDb(dictionary);
-        populateTable(dict);
+        List<Word> words = getRepository().loadDictWords(dictionary);
 
-        adapter = new StableArrayAdapter(rootView.getContext(), ids, values);
-        listview.setAdapter(adapter);
+        List<Integer> ids = new ArrayList<Integer>();
+        List<String> values = new ArrayList<String>();
 
-        ImageButton button = (ImageButton)rootView.findViewById(R.id.add_word);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getRepository().addWord(dictionary);
-            }
-        });
-        return rootView;
-}
-
-    StableArrayAdapter adapter = null;
-
-    private List<Word> loadDictionaryFromDb(int dictionary) {
-        WordDAO wordDao = JdbcWordDAO.getInstance(getActivity());
-        return wordDao.query(dictionary, Constants.MAX_NO_OF_QUESTIONS);
-    }
-
-    private void populateTable(List<Word> dict) {
-
-        values = new ArrayList<String>();
-        ids = new ArrayList<Long>();
-
-        for(Word word : dict){
+        for (Word word : words) {
             ids.add(word.getId());
             values.add(word.getBaseWord());
         }
-    }
-    private List<String> values = null;
-    private List<Long> ids = null;
 
-    private class StableArrayAdapter extends ArrayAdapter<String> {
+        final DefaultArrayAdapter adapter = new DefaultArrayAdapter(repository, ids, values, this);
+        listview.setAdapter(adapter);
 
-        private final Context context;
-        private List<Long> ids;
-        private List<String> values;
-
-
-        public StableArrayAdapter(Context context, List<Long> ids, List<String> values) {
-            super(context, R.layout.rowlayout, values);
-            this.context = context;
-            this.ids = ids;
-            this.values = values;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
-            TextView tv = (TextView)rowView.findViewById(R.id.rowlayoutTextView);
-            tv.setText(values.get(position));
-            ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutImageButton);
-            imageButton.setOnClickListener(new ClickListener(position));
-            return rowView;
-        }
-        private class ClickListener implements View.OnClickListener{
-
-            private int position;
-            public ClickListener(int position){
-                this.position = position;
-            }
+        ImageButton button = (ImageButton) rootView.findViewById(R.id.add_word);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                JdbcWordDAO.getInstance(getContext()).delete(ids.get(position));
-                values.remove(position);
-                ids.remove(position);
-                notifyDataSetChanged();
+                getRepository().showAddWord(dictionary);
             }
-        }
+        });
+        return rootView;
     }
+
+    @Override
+    public void textClicked(int position) {
+
+    }
+
+    @Override
+    public void buttonClicked(int position) {
+        repository.deleteWord(position);
+    }
+
 }

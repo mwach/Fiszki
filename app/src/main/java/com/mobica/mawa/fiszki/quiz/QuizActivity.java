@@ -1,14 +1,11 @@
 package com.mobica.mawa.fiszki.quiz;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
@@ -21,10 +18,13 @@ import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.List;
 
+import roboguice.activity.RoboActivity;
 
-public class QuizActivity extends Activity {
+
+public class QuizActivity extends RoboActivity implements QuizInterface {
 
     int correctAnswers = 0;
+    int dictionaryId = 0;
     QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
     List<Word> dbWords = null;
 
@@ -42,6 +42,10 @@ public class QuizActivity extends Activity {
         if (dictionaryDao != null) {
             dictionaryDao.close();
             dictionaryDao = null;
+        }
+        if (wordDao != null) {
+            wordDao.close();
+            wordDao = null;
         }
     }
 
@@ -103,38 +107,22 @@ public class QuizActivity extends Activity {
         }
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.mainMenuButton:
-                showMainMenu();
-                break;
-            default:
-                break;
-        }
-    }
-
     public void showMainMenu() {
         Intent mainMenuIntent = new Intent(this, MainScreen.class);
         mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainMenuIntent);
     }
 
-    public void startQuiz(View view) {
+    public void startQuiz(int noOfQuestions, int dictionaryId) {
 
-        EditText noOfQuestionsEditText = (EditText) findViewById(R.id.editTextNoOfQuestions);
-        int noOfQuestions = Integer.parseInt(noOfQuestionsEditText.getText().toString());
+        this.dictionaryId = dictionaryId;
         PreferencesHelper.setProperty(this, PreferencesHelper.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
-
-        Spinner dictionarySpinner = (Spinner) findViewById(R.id.spinnerDictionaries);
-        Dictionary selectedDict = (Dictionary) dictionarySpinner.getSelectedItem();
-
-        dbWords = getWordDao().queryRandom(selectedDict.getId(), noOfQuestions);
+        dbWords = getWordDao().queryRandom(dictionaryId, noOfQuestions);
 
         Bundle bundle = new Bundle();
-        bundle.putInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, dbWords.size());
+        bundle.putInt(QuestionFragmentInterface.NO_OF_QUESTIONS, dbWords.size());
         bundle.putInt(QuestionFragmentInterface.CURRENT_QUESTION_ID, 0);
         bundle.putString(QuestionFragmentInterface.CURRENT_WORD, dbWords.get(0).getBaseWord());
-
 
         ((Fragment) quizQuestionFragment).setArguments(bundle);
         getFragmentManager().beginTransaction()
@@ -167,9 +155,10 @@ public class QuizActivity extends Activity {
     private void showTestSummary() {
         QuizSummary quizSummary = new QuizSummary();
         Bundle bundle = new Bundle();
-        bundle.putInt(QuestionFragmentInterface.QUIZ_CORRECT_ANSWERS, correctAnswers);
-        bundle.putInt(QuestionFragmentInterface.QUIZ_NO_OF_QUESTIONS, dbWords.size());
-        bundle.putInt(QuestionFragmentInterface.QUIZ_RATIO, (100 * correctAnswers / dbWords.size()));
+        bundle.putInt(QuizSummary.CORRECT_ANSWERS, correctAnswers);
+        bundle.putInt(QuizSummary.NO_OF_QUESTIONS, dbWords.size());
+        bundle.putInt(QuizSummary.DICTIONARY_ID, dictionaryId);
+        bundle.putInt(QuizSummary.RATIO, (100 * correctAnswers / dbWords.size()));
         quizSummary.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, quizSummary)
@@ -192,5 +181,10 @@ public class QuizActivity extends Activity {
         int baseLanguage = getBaseLanguage();
         int refLanguage = getRefLanguage();
         return getDictionaryDao().getListOfDictionaries(baseLanguage, refLanguage);
+    }
+
+    @Override
+    public int getNumberOfQuestions() {
+        return PreferencesHelper.getNumberOfQuestions(this);
     }
 }

@@ -100,7 +100,7 @@ public class RepositoryActivity extends Activity implements Repository {
         }
     }
 
-    public void showMainMenu() {
+    private void showMainMenu() {
         Intent mainMenuIntent = new Intent(this, MainScreen.class);
         mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainMenuIntent);
@@ -112,12 +112,14 @@ public class RepositoryActivity extends Activity implements Repository {
         return this;
     }
 
+    @Override
     public void loadDictionary(int dictionaryId) {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, WordsListFragment.newInstance(dictionaryId))
                 .commit();
     }
 
+    @Override
     public void showAddWord(int dictionary) {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddWordFragment.newInstance(dictionary))
@@ -126,7 +128,7 @@ public class RepositoryActivity extends Activity implements Repository {
 
     @Override
     public void deleteDictionary(int id) {
-        //JdbcDictionaryDAO.getInstance(getContext()).delete(id);
+        getDictionaryDao().delete(id);
     }
 
     @Override
@@ -135,12 +137,14 @@ public class RepositoryActivity extends Activity implements Repository {
 
     }
 
+    @Override
     public void showAddDictionary() {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddDictionaryFragment.newInstance())
                 .commit();
     }
 
+    @Override
     public void addDictionary(Dictionary dictionary) {
         dictionary.setBaseLanguage(new Language(getBaseLanguage(), null, null));
         dictionary.setRefLanguage(new Language(getRefLanguage(), null, null));
@@ -163,12 +167,12 @@ public class RepositoryActivity extends Activity implements Repository {
     }
 
     @Override
-    public List<Dictionary> getListOfDictionaries() {
-        return getDictionaryDao().getListOfDictionaries(getBaseLanguage(), getRefLanguage());
+    public List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage) {
+        return getDictionaryDao().getListOfDictionaries(baseLanguage, refLanguage);
     }
 
     @Override
-    public List<Word> loadDictWords(int dictionary) {
+    public List<Word> showWords(int dictionary) {
         return getWordDao().load(dictionary);
     }
 

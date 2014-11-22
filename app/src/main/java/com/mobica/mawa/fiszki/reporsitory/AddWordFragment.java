@@ -1,7 +1,6 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,15 +14,27 @@ import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
 import com.mobica.mawa.fiszki.dao.word.Word;
 
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
+
 
 /**
  *
  */
-public class AddWordFragment extends Fragment {
+public class AddWordFragment extends RoboFragment {
 
     private static final String DICTIONARY_ID = "DICTIONARY_ID";
     private int dictionaryId;
     private Repository repository;
+
+    @InjectView(R.id.baseWordEditText)
+    private EditText baseWordEditText;
+    @InjectView(R.id.refWordEditText)
+    private EditText refWordEditText;
+    @InjectView(R.id.addWordConfirm)
+    private ImageButton imageButton;
+    @InjectView(R.id.addWordCancel)
+    private ImageButton imageButtonCancel;
 
     public AddWordFragment() {
         // Required empty public constructor
@@ -49,14 +60,18 @@ public class AddWordFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_add_word, container, false);
 
-        getActivity().getActionBar().setTitle(R.string.add_word);
-
+        if (getActivity() != null && getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(R.string.add_word);
+        }
         dictionaryId = getArguments().getInt(DICTIONARY_ID);
 
-        final EditText baseWordEditText = (EditText) rootView.findViewById(R.id.baseWordEditText);
-        final EditText refWordEditText = (EditText) rootView.findViewById(R.id.refWordEditText);
-        final ImageButton imageButton = (ImageButton) rootView.findViewById(R.id.addWordConfirm);
-        final ImageButton imageButtonCancel = (ImageButton) rootView.findViewById(R.id.addWordCancel);
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         imageButton.setClickable(false);
 
         TextWatcher tv = new TextWatcher() {
@@ -72,9 +87,9 @@ public class AddWordFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 if (baseWordEditText.getText().toString().length() > 0 &&
                         refWordEditText.getText().toString().length() > 0) {
-                    imageButton.setClickable(true);
+                    imageButton.setEnabled(true);
                 } else {
-                    imageButton.setClickable(false);
+                    imageButton.setEnabled(false);
                 }
             }
         };
@@ -92,7 +107,7 @@ public class AddWordFragment extends Fragment {
                 getRepository().addWord(word);
                 baseWordEditText.setText("");
                 refWordEditText.setText("");
-                imageButton.setClickable(false);
+                imageButton.setEnabled(false);
             }
         });
 
@@ -102,14 +117,14 @@ public class AddWordFragment extends Fragment {
                 getRepository().loadDictionary(dictionaryId);
             }
         });
-        return rootView;
+
     }
 
-    public Repository getRepository() {
+    private Repository getRepository() {
         return repository;
     }
 
-    public void setRepository(Repository repository) {
+    private void setRepository(Repository repository) {
         this.repository = repository;
     }
 

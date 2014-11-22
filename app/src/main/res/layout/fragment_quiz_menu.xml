@@ -51,9 +51,9 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <Button
+            android:id="@+id/startQuizButton"
             android:layout_weight="1"
             android:background="@drawable/buttonshape"
-            android:onClick="startQuiz"
             android:text="@string/start"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/activity_word_mid_size" />

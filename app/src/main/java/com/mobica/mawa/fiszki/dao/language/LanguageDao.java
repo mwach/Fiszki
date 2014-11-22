@@ -6,12 +6,10 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
-import com.mobica.mawa.fiszki.helper.ResourcesHelper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,7 +25,6 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
     private static final AtomicInteger usageCounter = new AtomicInteger(0);
     private static LanguageDao helper = null;
     private Dao<Language, Integer> languageDao = null;
-    private RuntimeExceptionDao<Language, Integer> runtimeLanguageDao = null;
     private Context context;
 
     public LanguageDao(Context context) {
@@ -49,14 +46,6 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
         }
         return languageDao;
     }
-
-    private RuntimeExceptionDao<Language, Integer> getRuntimeExceptionLanguageDao() {
-        if (runtimeLanguageDao == null) {
-            runtimeLanguageDao = getRuntimeExceptionDao(Language.class);
-        }
-        return runtimeLanguageDao;
-    }
-
 
     public Language getBaseLanguage() {
         String baseLanguageName = PreferencesHelper.getBaseLanguage(context);
@@ -87,13 +76,6 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
             Log.e(LanguageDao.class.getName(), "Cannot create database");
             throw new RuntimeException(e);
         }
-
-        String[] languages = context.getResources().getStringArray(R.array.languages);
-        for (String languageStr : languages) {
-            Language language = ResourcesHelper.getLanguage(languageStr);
-            getRuntimeExceptionLanguageDao().create(language);
-        }
-
     }
 
     @Override
@@ -114,7 +96,6 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
         if (usageCounter.decrementAndGet() == 0) {
             super.close();
             languageDao = null;
-            runtimeLanguageDao = null;
             helper = null;
         }
     }

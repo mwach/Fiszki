@@ -10,7 +10,6 @@ import android.view.View;
 import com.mobica.mawa.fiszki.quiz.QuizActivity;
 import com.mobica.mawa.fiszki.reporsitory.RepositoryActivity;
 
-
 public class MainScreen extends Activity {
 
     @Override
@@ -18,7 +17,6 @@ public class MainScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -42,7 +40,7 @@ public class MainScreen extends Activity {
                 startActivity(aboutIntent);
                 break;
             default:
-                return false;
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }

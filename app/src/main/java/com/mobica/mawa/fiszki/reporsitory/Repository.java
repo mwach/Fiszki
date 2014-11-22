@@ -34,7 +34,7 @@ public interface Repository {
 
     int getRefLanguage();
 
-    List<Dictionary> getListOfDictionaries();
+    List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage);
 
-    List<Word> loadDictWords(int dictionary);
+    List<Word> showWords(int dictionary);
 }

@@ -48,5 +48,6 @@
     <string name="marcin">Marcin Wachowiak</string>
     <string name="email">E-mail</string>
     <string name="marcinmail">marcin.wachowiak@gmail.com</string>
+    <string name="restartQuiz">Re-run quiz</string>
 
 </resources>

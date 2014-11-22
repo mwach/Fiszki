@@ -8,23 +8,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.util.List;
+
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QuizMenuFragment extends Fragment {
+public class QuizMenuFragment extends RoboFragment {
 
+    @InjectView(R.id.spinnerDictionaries)
+    Spinner spinner;
+    @InjectView(R.id.editTextNoOfQuestions)
+    EditText editTextNoOfQuestions;
+    @InjectView(R.id.startQuizButton)
+    Button startQuizButton;
 
-    private QuizActivity activity = null;
+    private QuizInterface quiz = null;
 
     public QuizMenuFragment() {
         // Required empty public constructor
@@ -33,27 +42,34 @@ public class QuizMenuFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (QuizActivity) activity;
+        this.quiz = (QuizInterface) activity;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_quiz_menu, container, false);
+        return inflater.inflate(R.layout.fragment_quiz_menu, container, false);
+    }
 
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.spinnerDictionaries);
-        populateSpinner(rootView.getContext(), spinner, getListOfDictionaries());
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        int noOfQuestions = PreferencesHelper.getNumberOfQuestions(getActivity());
-        EditText et = (EditText) rootView.findViewById(R.id.editTextNoOfQuestions);
-        et.setText(String.valueOf(noOfQuestions));
+        List<Dictionary> dictionaries = quiz.getListOfDictionaries();
+        populateSpinner(view.getContext(), spinner, dictionaries);
+        editTextNoOfQuestions.setText(String.valueOf(quiz.getNumberOfQuestions()));
 
-        return rootView;
+        startQuizButton.setOnClickListener(new QuizMenuClickListener());
+        if (dictionaries.isEmpty()) {
+            startQuizButton.setEnabled(false);
+        }
+
     }
 
     private void populateSpinner(Context rootItem, Spinner spinner, List<Dictionary> items) {
+
         ArrayAdapter<Dictionary> adapter =
-                new DictionariesArrayAdapter(rootItem,
+                new ArrayAdapter<Dictionary>(rootItem,
                         android.R.layout.simple_spinner_item, items);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -61,9 +77,25 @@ public class QuizMenuFragment extends Fragment {
         spinner.setAdapter(adapter);
     }
 
-    private List<Dictionary> getListOfDictionaries() {
+    private void startQuiz() {
+        int noOfQuestions = Integer.parseInt(editTextNoOfQuestions.getText().toString());
+        Dictionary selectedDict = (Dictionary) spinner.getSelectedItem();
+        quiz.startQuiz(noOfQuestions, selectedDict.getId());
+    }
 
-        return activity.getListOfDictionaries();
+    private class QuizMenuClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+            switch (view.getId()) {
+                case R.id.startQuizButton:
+                    startQuiz();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 }

@@ -5,16 +5,15 @@ package com.mobica.mawa.fiszki.quiz;
  */
 public interface QuestionFragmentInterface {
 
-    public static final String QUIZ_NO_OF_QUESTIONS = "no_of_questions";
-    public static final String QUIZ_CORRECT_ANSWERS = "correct_answers";
-    public static final String QUIZ_RATIO  = "quiz_ratio";
-    java.lang.String CURRENT_QUESTION_ID = "CURRENT_QUESTION_ID";
-    java.lang.String CURRENT_WORD = "CURRENT_WORD";
+    static final String NO_OF_QUESTIONS = "NO_OF_QUESTIONS";
+    static final String CURRENT_QUESTION_ID = "CURRENT_QUESTION_ID";
+    static final String CURRENT_WORD = "CURRENT_WORD";
+
+    int getCurrentQuestionId();
 
     void setCurrentQuestionId(int currentQuestionId);
-    int getCurrentQuestionId();
-    void setCurrentWord(String word);
-    void setCurrentWordResponse(String wordResponse);
 
-    void setNumberOfQuestions(int size);
+    void setCurrentWord(String word);
+
+    void setCurrentWordResponse(String wordResponse);
 }

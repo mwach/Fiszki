@@ -17,12 +17,19 @@ import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.inject.InjectView;
+
 /**
  *
  */
 public class DictionariesListFragment extends Fragment implements AdapterClickListener {
 
     private Repository repository;
+
+    @InjectView(R.id.dictionariesList)
+    private ListView dictionariesListView;
+    @InjectView(R.id.add_dictionary)
+    private ImageButton addDictButton;
 
     public DictionariesListFragment() {
     }
@@ -52,13 +59,20 @@ public class DictionariesListFragment extends Fragment implements AdapterClickLi
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_dictionaries_list, container, false);
 
-        getActivity().getActionBar().setTitle(R.string.available_dictionaries);
+        if (getActivity() != null && getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(R.string.available_dictionaries);
+        }
+        return rootView;
+    }
 
-        int baseLanguage = repository.getBaseLanguage();
-        int refLanguage = repository.getRefLanguage();
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        ListView listview = (ListView) rootView.findViewById(R.id.dictionariesList);
-        List<Dictionary> dictionaries = getRepository().getListOfDictionaries();
+        int baseLanguage = getRepository().getBaseLanguage();
+        int refLanguage = getRepository().getRefLanguage();
+
+        List<Dictionary> dictionaries = getRepository().getListOfDictionaries(baseLanguage, refLanguage);
 
         List<Integer> ids = new ArrayList<Integer>();
         List<String> values = new ArrayList<String>();
@@ -66,17 +80,16 @@ public class DictionariesListFragment extends Fragment implements AdapterClickLi
             values.add(dict.getName());
             ids.add(dict.getId());
         }
-        DefaultArrayAdapter adapter = new DefaultArrayAdapter(repository, ids, values, this);
-        listview.setAdapter(adapter);
+        DefaultArrayAdapter adapter = new DefaultArrayAdapter(getRepository(), ids, values, this);
+        dictionariesListView.setAdapter(adapter);
 
-        ImageButton addDictButton = (ImageButton) rootView.findViewById(R.id.add_dictionary);
         addDictButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getRepository().showAddDictionary();
             }
         });
-        return rootView;
+
     }
 
     @Override

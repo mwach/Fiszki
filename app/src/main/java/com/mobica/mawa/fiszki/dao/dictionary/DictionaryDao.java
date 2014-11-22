@@ -6,15 +6,12 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.language.Language;
-import com.mobica.mawa.fiszki.helper.ResourcesHelper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -29,15 +26,10 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
     public static final String DATABASE_NAME = "Dictionary.db";
     private static final AtomicInteger usageCounter = new AtomicInteger(0);
     private static DictionaryDao helper = null;
-    private Dao<Language, Integer> languageDao = null;
-    private RuntimeExceptionDao<Language, Integer> runtimeLanguageDao = null;
-    private Context context;
     private Dao<Dictionary, Integer> dictionaryDao = null;
-    private RuntimeExceptionDao<Dictionary, Integer> runtimeDictionaryDao = null;
 
     public DictionaryDao(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
-        this.context = context;
     }
 
     public static synchronized DictionaryDao getDictionaryDao(Context context) {
@@ -46,24 +38,6 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
         }
         usageCounter.incrementAndGet();
         return helper;
-    }
-
-    private Context getContext() {
-        return context;
-    }
-
-    private Dao<Language, Integer> getLanguageDao() throws SQLException {
-        if (languageDao == null) {
-            languageDao = getDao(Language.class);
-        }
-        return languageDao;
-    }
-
-    private RuntimeExceptionDao<Language, Integer> getRuntimeExceptionLanguageDao() {
-        if (runtimeLanguageDao == null) {
-            runtimeLanguageDao = getRuntimeExceptionDao(Language.class);
-        }
-        return runtimeLanguageDao;
     }
 
     @Override
@@ -75,13 +49,6 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
             Log.e(DictionaryDao.class.getName(), "Cannot create database");
             throw new RuntimeException(e);
         }
-
-        String[] dictionaries = getContext().getResources().getStringArray(R.array.dictionaries);
-        for (String dictionaryStr : dictionaries) {
-            Dictionary dictionary = ResourcesHelper.getDictionary(dictionaryStr);
-            getRuntimeExceptionDictionaryDao().create(dictionary);
-        }
-
     }
 
     @Override
@@ -104,19 +71,11 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
         return dictionaryDao;
     }
 
-    private RuntimeExceptionDao<Dictionary, Integer> getRuntimeExceptionDictionaryDao() {
-        if (runtimeDictionaryDao == null) {
-            runtimeDictionaryDao = getRuntimeExceptionDao(Dictionary.class);
-        }
-        return runtimeDictionaryDao;
-    }
-
     @Override
     public void close() {
         if (usageCounter.decrementAndGet() == 0) {
             super.close();
             dictionaryDao = null;
-            runtimeDictionaryDao = null;
             helper = null;
         }
     }
@@ -143,6 +102,14 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
     public void add(Dictionary dictionary) {
         try {
             getDictionaryDao().create(dictionary);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int id) {
+        try {
+            getDictionaryDao().deleteById(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

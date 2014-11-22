@@ -15,10 +15,22 @@ import android.widget.ImageButton;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
 
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddDictionaryFragment extends Fragment {
+public class AddDictionaryFragment extends RoboFragment {
+
+    @InjectView(R.id.dictionaryEditText)
+    private EditText dictionaryEditText;
+    @InjectView(R.id.descriptionEditText)
+    private EditText descriptionEditText;
+    @InjectView(R.id.addDirectoryConfirm)
+    private ImageButton addDirectoryConfirmButton;
+    @InjectView(R.id.addDirectoryCancel)
+    private ImageButton addDirectoryCancelButton;
 
     private Repository repository;
 
@@ -40,15 +52,26 @@ public class AddDictionaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_add_dictionary, container, false);
+        return inflater.inflate(R.layout.fragment_add_dictionary, container, false);
 
-        getActivity().getActionBar().setTitle(R.string.add_dictionary);
+    }
 
-        final EditText baseWordEditText = (EditText) rootView.findViewById(R.id.dictionaryEditText);
-        final EditText refWordEditText = (EditText) rootView.findViewById(R.id.descriptionEditText);
-        final ImageButton imageButton = (ImageButton) rootView.findViewById(R.id.addDirectoryConfirm);
-        final ImageButton imageButtonCancel = (ImageButton) rootView.findViewById(R.id.addDirectoryCancel);
-        imageButton.setClickable(false);
+    public Repository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(Repository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getActivity() != null && getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(R.string.add_dictionary);
+        }
+        addDirectoryConfirmButton.setClickable(false);
 
         TextWatcher tv = new TextWatcher() {
             @Override
@@ -61,46 +84,36 @@ public class AddDictionaryFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (baseWordEditText.getText().toString().length() > 0 &&
-                        refWordEditText.getText().toString().length() > 0) {
-                    imageButton.setEnabled(true);
+                if (dictionaryEditText.getText().toString().length() > 0 &&
+                        descriptionEditText.getText().toString().length() > 0) {
+                    addDirectoryConfirmButton.setEnabled(true);
                 } else {
-                    imageButton.setEnabled(false);
+                    addDirectoryConfirmButton.setEnabled(false);
                 }
             }
         };
 
-        baseWordEditText.addTextChangedListener(tv);
-        refWordEditText.addTextChangedListener(tv);
+        dictionaryEditText.addTextChangedListener(tv);
+        descriptionEditText.addTextChangedListener(tv);
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        addDirectoryConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Dictionary dictionary = new Dictionary();
-                dictionary.setName(baseWordEditText.getText().toString());
-                dictionary.setDescription(refWordEditText.getText().toString());
+                dictionary.setName(dictionaryEditText.getText().toString());
+                dictionary.setDescription(descriptionEditText.getText().toString());
                 getRepository().addDictionary(dictionary);
-                baseWordEditText.setText("");
-                refWordEditText.setText("");
-                imageButton.setClickable(false);
+                dictionaryEditText.setText("");
+                descriptionEditText.setText("");
+                addDirectoryConfirmButton.setClickable(false);
             }
         });
 
-        imageButtonCancel.setOnClickListener(new View.OnClickListener() {
+        addDirectoryCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getRepository().showDictionaries();
             }
         });
-        return rootView;
     }
-
-    public Repository getRepository() {
-        return repository;
-    }
-
-    public void setRepository(Repository repository) {
-        this.repository = repository;
-    }
-
 }

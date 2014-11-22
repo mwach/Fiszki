@@ -68,13 +68,12 @@
         android:padding="@dimen/activity_triple_vertical_margin">
 
         <Button
-            android:id="@+id/mainMenuButton"
+            android:id="@+id/reRunQuizButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/buttonshape"
-            android:onClick="onClick"
-            android:text="@string/mainMenu"
+            android:text="@string/restartQuiz"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
     </TableRow>

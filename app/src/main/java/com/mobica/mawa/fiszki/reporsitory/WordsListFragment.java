@@ -61,12 +61,13 @@ public class WordsListFragment extends Fragment implements AdapterClickListener 
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_words_list, container, false);
 
-        getActivity().getActionBar().setTitle(R.string.available_words);
-
+        if (getActivity() != null && getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setTitle(R.string.available_words);
+        }
         final ListView listview = (ListView) rootView.findViewById(R.id.wordsList);
 
         final int dictionary = getArguments().getInt(DICTIONARY_ID);
-        List<Word> words = getRepository().loadDictWords(dictionary);
+        List<Word> words = getRepository().showWords(dictionary);
 
         List<Integer> ids = new ArrayList<Integer>();
         List<String> values = new ArrayList<String>();

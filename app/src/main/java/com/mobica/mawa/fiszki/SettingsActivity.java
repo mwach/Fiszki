@@ -1,6 +1,6 @@
 package com.mobica.mawa.fiszki;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.mobica.mawa.fiszki.dao.language.Language;
 import com.mobica.mawa.fiszki.dao.language.LanguageDao;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
@@ -18,8 +17,15 @@ import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends RoboActivity {
+
+    @InjectView(R.id.spinnerBaseLanguage)
+    private Spinner baseLanguageSpinner;
+    @InjectView(R.id.spinnerRefLanguage)
+    private Spinner refLanguageSpinner;
 
     private LanguageDao languageDao = null;
 
@@ -35,7 +41,7 @@ public class SettingsActivity extends Activity {
     private LanguageDao getLanguageDao() {
         if (languageDao == null) {
             languageDao =
-                    OpenHelperManager.getHelper(this, LanguageDao.class);
+                    LanguageDao.getLanguageDao(this);
         }
         return languageDao;
     }
@@ -47,14 +53,12 @@ public class SettingsActivity extends Activity {
 
         List<String> dictionaries = getListOfDictionaries();
 
-        Spinner baseLanguageSpinner = (Spinner) findViewById(R.id.spinnerBaseLanguage);
         populateSpinner(baseLanguageSpinner, dictionaries);
 
         String baseLanguage = PreferencesHelper.getBaseLanguage(this);
         baseLanguageSpinner.setSelection(dictionaries.indexOf(baseLanguage));
         baseLanguageSpinner.setOnItemSelectedListener(new SpinnerListener(this, PreferencesHelper.BASE_LANGUAGE));
 
-        Spinner refLanguageSpinner = (Spinner) findViewById(R.id.spinnerRefLanguage);
         populateSpinner(refLanguageSpinner, dictionaries);
 
         String refLanguage = PreferencesHelper.getRefLanguage(this);
@@ -74,7 +78,6 @@ public class SettingsActivity extends Activity {
 
     private List<String> getListOfDictionaries() {
 
-//        List<Language> definedLanguages = JdbcLanguageDAO.getInstance(this).query(Constants.UNLIMITED);
         List<Language> definedLanguages = getLanguageDao().queryForAll();
         List<String> languages = new ArrayList<String>();
         for (Language lang : definedLanguages) {
@@ -91,6 +94,7 @@ public class SettingsActivity extends Activity {
                 Intent homeIntent = new Intent();
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -98,18 +102,18 @@ public class SettingsActivity extends Activity {
 
     private class SpinnerListener implements AdapterView.OnItemSelectedListener {
 
-        private Activity activity;
+        private Context context;
         private String propertyName;
 
-        public SpinnerListener(Activity activity, String propertyName) {
-            this.activity = activity;
+        public SpinnerListener(Context context, String propertyName) {
+            this.context = context;
             this.propertyName = propertyName;
         }
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             String selectedLanguage = ((TextView) view).getText().toString();
-            PreferencesHelper.setProperty(activity, propertyName, selectedLanguage);
+            PreferencesHelper.setProperty(context, propertyName, selectedLanguage);
         }
 
         @Override

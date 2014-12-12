@@ -1,7 +1,6 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,18 @@ import android.widget.ListView;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.common.AdapterClickListener;
 import com.mobica.mawa.fiszki.common.DefaultArrayAdapter;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.fragment.provided.RoboFragment;
 import roboguice.inject.InjectView;
 
 /**
  *
  */
-public class DictionariesListFragment extends Fragment implements AdapterClickListener {
+public class DictionariesListFragment extends RoboFragment implements AdapterClickListener {
 
     private Repository repository;
 

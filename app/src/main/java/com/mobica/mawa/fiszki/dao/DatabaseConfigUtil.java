@@ -1,9 +1,9 @@
 package com.mobica.mawa.fiszki.dao;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.language.Language;
-import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Language;
+import com.mobica.mawa.fiszki.dao.bean.Word;
 
 import java.io.File;
 

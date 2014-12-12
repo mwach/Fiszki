@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Word;
 
 import roboguice.fragment.provided.RoboFragment;
 import roboguice.inject.InjectView;
@@ -103,7 +103,7 @@ public class AddWordFragment extends RoboFragment {
                 Word word = new Word();
                 word.setBaseWord(baseWordEditText.getText().toString());
                 word.setRefWord(refWordEditText.getText().toString());
-                word.setDictionary(new Dictionary(dictionaryId, null, null, null, null));
+                word.setDictionary(new Dictionary(dictionaryId, null, null, null, null, null));
                 getRepository().addWord(word);
                 baseWordEditText.setText("");
                 refWordEditText.setText("");

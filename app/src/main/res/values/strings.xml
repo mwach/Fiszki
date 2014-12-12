@@ -23,7 +23,6 @@
     <string name="available_dictionaries">Available dictionaries</string>
     <string name="remove">Remove</string>
     <string name="x">X</string>
-    <string name="eng_pln">ENG - PLN</string>
     <string name="add_dictionary">Add dictionary</string>
     <string name="main_menu">Main menu</string>
     <string name="home">Home</string>
@@ -31,8 +30,6 @@
     <string name="correctAnswers">Correct answers</string>
     <string name="ratio_pct">%d %%</string>
     <string name="exit">Exit</string>
-    <string name="en">EN</string>
-    <string name="pl">PL</string>
     <string name="dictionary">Dictionary</string>
     <string name="add_word">Add word</string>
     <string name="base_word">Base word</string>
@@ -49,5 +46,20 @@
     <string name="email">E-mail</string>
     <string name="marcinmail">marcin.wachowiak@gmail.com</string>
     <string name="restartQuiz">Re-run quiz</string>
-
+    <string name="couldNotCreateDir">Could not create dictionary</string>
+    <string name="couldNotCreateWord">Could not create word</string>
+    <string name="couldNotRetrieveBaseLanguage">Could not retrieve base language</string>
+    <string name="couldNotRetrieveRefLanguage">Could not retrieve ref language</string>
+    <string name="couldNotDeleteDictionary">Could not delete dictionary</string>
+    <string name="couldNotDeleteWord">Could not delete word</string>
+    <string name="couldNotRetrieveDictionaries">Could not retrieve list of dictionaries</string>
+    <string name="couldNotRetrieveWords">Could not retrieve list of words for given dictionary</string>
+    <string name="emptyDictionary">Provided dictionary is empty</string>
+    <string name="refresh">Refresh</string>
+    <string name="couldNotRetrieveLanguages">Could not retrieve languages from server. Details: %s</string>
+    <string name="couldNotUpdateDatabase">Could not update database</string>
+    <string name="noDataAvailableOnServer">No data available on server</string>
+    <string name="download">Download</string>
+    <string name="info">Information</string>
+    <string name="error">Error</string>
 </resources>

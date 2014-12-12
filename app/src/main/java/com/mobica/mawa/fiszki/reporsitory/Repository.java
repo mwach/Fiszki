@@ -2,8 +2,8 @@ package com.mobica.mawa.fiszki.reporsitory;
 
 import android.content.Context;
 
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Word;
 
 import java.util.List;
 

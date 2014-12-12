@@ -1,4 +1,4 @@
-package com.mobica.mawa.fiszki.dao.dictionary;
+package com.mobica.mawa.fiszki.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,32 +12,22 @@ import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by mawa on 2014-11-12.
  */
-public class DictionaryDao extends OrmLiteSqliteOpenHelper {
+class DictionaryDao extends OrmLiteSqliteOpenHelper implements IDictionaryDao {
 
     public static final int DATABASE_VERSION = 14;
     public static final String DATABASE_NAME = "Dictionary.db";
-    private static final AtomicInteger usageCounter = new AtomicInteger(0);
-    private static DictionaryDao helper = null;
     private Dao<Dictionary, Integer> dictionaryDao = null;
 
     public DictionaryDao(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
-    }
-
-    public static synchronized DictionaryDao getDictionaryDao(Context context) {
-        if (helper == null) {
-            helper = new DictionaryDao(context);
-        }
-        usageCounter.incrementAndGet();
-        return helper;
     }
 
     @Override
@@ -72,46 +62,50 @@ public class DictionaryDao extends OrmLiteSqliteOpenHelper {
     }
 
     @Override
-    public void close() {
-        if (usageCounter.decrementAndGet() == 0) {
-            super.close();
-            dictionaryDao = null;
-            helper = null;
+    public List<Dictionary> enumerate(int baseLanguage, int refLanguage) throws SQLException {
+
+        QueryBuilder<Dictionary, Integer> qb = getDictionaryDao().queryBuilder();
+        Where where = qb.where();
+        where.eq(Dictionary.BASE_LANG, baseLanguage);
+        // and
+        where.and();
+        // the password field must be equal to "_secret"
+        where.eq(Dictionary.REF_LANG, refLanguage);
+
+        qb.orderBy(Dictionary.DESC, false);
+        PreparedQuery<Dictionary> preparedQuery = qb.prepare();
+        return dictionaryDao.query(preparedQuery);
+    }
+
+    @Override
+    public Dictionary create(Dictionary dictionary) throws SQLException {
+        int dictionaryId = getDictionaryDao().create(dictionary);
+        dictionary.setId(dictionaryId);
+        return dictionary;
+    }
+
+    @Override
+    public void remove(int objectId) throws SQLException {
+        getDictionaryDao().deleteById(objectId);
+    }
+
+    @Override
+    public void update(Dictionary object) throws SQLException {
+        int rowsUpdated = getDictionaryDao().update(object);
+        if (rowsUpdated == 0) {
+            throw new SQLException("No rows were updated");
+        } else if (rowsUpdated > 1) {
+            throw new SQLException("More than one row was updated");
         }
     }
 
-    public List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage) {
-
-        // the name field must be equal to "foo"
-        try {
-            QueryBuilder<Dictionary, Integer> qb = getDictionaryDao().queryBuilder();
-            Where where = qb.where();
-            where.eq(Dictionary.BASE_LANG, baseLanguage);
-            // and
-            where.and();
-            // the password field must be equal to "_secret"
-            where.eq(Dictionary.REF_LANG, refLanguage);
-            PreparedQuery<Dictionary> preparedQuery = qb.prepare();
-            return dictionaryDao.query(preparedQuery);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public Dictionary get(int objectId) throws SQLException {
+        return getDictionaryDao().queryForId(objectId);
     }
 
-    public void add(Dictionary dictionary) {
-        try {
-            getDictionaryDao().create(dictionary);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete(int id) {
-        try {
-            getDictionaryDao().deleteById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public List<Dictionary> enumerate() throws SQLException {
+        return getDictionaryDao().queryForAll();
     }
 }

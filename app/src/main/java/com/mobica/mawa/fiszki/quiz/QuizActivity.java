@@ -3,20 +3,25 @@ package com.mobica.mawa.fiszki.quiz;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.dictionary.DictionaryDao;
-import com.mobica.mawa.fiszki.dao.language.LanguageDao;
-import com.mobica.mawa.fiszki.dao.word.Word;
-import com.mobica.mawa.fiszki.dao.word.WordDao;
+import com.mobica.mawa.fiszki.common.AlertHelper;
+import com.mobica.mawa.fiszki.dao.FiszkiDao;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Word;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import javax.inject.Inject;
 
 import roboguice.activity.RoboActivity;
 
@@ -28,51 +33,14 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
     QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
     List<Word> dbWords = null;
 
-    private LanguageDao languageDao = null;
-    private DictionaryDao dictionaryDao = null;
-    private WordDao wordDao = null;
+    @Inject
+    FiszkiDao fiszkiDao;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (languageDao != null) {
-            languageDao.close();
-            languageDao = null;
-        }
-        if (dictionaryDao != null) {
-            dictionaryDao.close();
-            dictionaryDao = null;
-        }
-        if (wordDao != null) {
-            wordDao.close();
-            wordDao = null;
-        }
+        fiszkiDao.close();
     }
-
-    private LanguageDao getLanguageDao() {
-        if (languageDao == null) {
-            languageDao =
-                    LanguageDao.getLanguageDao(this);
-        }
-        return languageDao;
-    }
-
-    private DictionaryDao getDictionaryDao() {
-        if (dictionaryDao == null) {
-            dictionaryDao =
-                    DictionaryDao.getDictionaryDao(this);
-        }
-        return dictionaryDao;
-    }
-
-    private WordDao getWordDao() {
-        if (wordDao == null) {
-            wordDao =
-                    WordDao.getWordDao(this);
-        }
-        return wordDao;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +85,18 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
 
         this.dictionaryId = dictionaryId;
         PreferencesHelper.setProperty(this, PreferencesHelper.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
-        dbWords = getWordDao().queryRandom(dictionaryId, noOfQuestions);
+        try {
+            dbWords = fiszkiDao.getWordDao().enumerate(dictionaryId);
+        } catch (SQLException e) {
+            Log.e(QuizActivity.class.getName(), "startQuiz", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveWords));
+        }
+        if (dbWords.isEmpty()) {
+            AlertHelper.showError(this, getString(R.string.emptyDictionary));
+            return;
+        }
+
+        List<Word> filteredWords = filterWords(dbWords, noOfQuestions);
 
         Bundle bundle = new Bundle();
         bundle.putInt(QuestionFragmentInterface.NO_OF_QUESTIONS, dbWords.size());
@@ -128,6 +107,17 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, (Fragment) quizQuestionFragment)
                 .commit();
+    }
+
+    private List<Word> filterWords(List<Word> dbWords, int limit) {
+
+        List<Word> response = new ArrayList<Word>();
+        //, noOfQuestions
+        Random random = new Random();
+        while (dbWords.size() < limit) {
+            response.add(dbWords.get(random.nextInt(dbWords.size())));
+        }
+        return response;
     }
 
 
@@ -170,17 +160,36 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
     }
 
     public int getBaseLanguage() {
-        return getLanguageDao().getBaseLanguage().getId();
+        try {
+            return fiszkiDao.getLanguageDao().getBaseLanguage().getId();
+        } catch (SQLException e) {
+            Log.e(QuizActivity.class.getName(), "getBaseLanguage", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveBaseLanguage));
+        }
+        return 0;
     }
 
     public int getRefLanguage() {
-        return getLanguageDao().getRefLanguage().getId();
+        try {
+            return fiszkiDao.getLanguageDao().getRefLanguage().getId();
+        } catch (SQLException e) {
+            Log.e(QuizActivity.class.getName(), "getRefLanguage", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveRefLanguage));
+        }
+        return 0;
     }
 
     public List<Dictionary> getListOfDictionaries() {
         int baseLanguage = getBaseLanguage();
         int refLanguage = getRefLanguage();
-        return getDictionaryDao().getListOfDictionaries(baseLanguage, refLanguage);
+        List<Dictionary> dictionaries = new ArrayList<Dictionary>();
+        try {
+            dictionaries.addAll(fiszkiDao.getDictionaryDao().enumerate(baseLanguage, refLanguage));
+        } catch (SQLException e) {
+            Log.e(QuizActivity.class.getName(), "getListOfDictionaries", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveDictionaries));
+        }
+        return dictionaries;
     }
 
     @Override

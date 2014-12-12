@@ -1,4 +1,4 @@
-package com.mobica.mawa.fiszki.dao.language;
+package com.mobica.mawa.fiszki.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,35 +9,25 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.dao.bean.Language;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by mawa on 2014-11-12.
  */
-public class LanguageDao extends OrmLiteSqliteOpenHelper {
+class LanguageDao extends OrmLiteSqliteOpenHelper implements ILanguageDao {
 
     public static final int DATABASE_VERSION = 13;
     public static final String DATABASE_NAME = "Language.db";
-    private static final AtomicInteger usageCounter = new AtomicInteger(0);
-    private static LanguageDao helper = null;
     private Dao<Language, Integer> languageDao = null;
     private Context context;
 
     public LanguageDao(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
         this.context = context;
-    }
-
-    public static synchronized LanguageDao getLanguageDao(Context context) {
-        if (helper == null) {
-            helper = new LanguageDao(context);
-        }
-        usageCounter.incrementAndGet();
-        return helper;
     }
 
     private Dao<Language, Integer> getLanguageDao() throws SQLException {
@@ -47,24 +37,14 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
         return languageDao;
     }
 
-    public Language getBaseLanguage() {
+    public Language getBaseLanguage() throws SQLException {
         String baseLanguageName = PreferencesHelper.getBaseLanguage(context);
-        try {
-            return getLanguageDao().queryForEq(Language.NAME, baseLanguageName).get(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getLanguageDao().queryForEq(Language.NAME, baseLanguageName).get(0);
     }
 
-    public Language getRefLanguage() {
+    public Language getRefLanguage() throws SQLException {
         String refLanguageName = PreferencesHelper.getRefLanguage(context);
-        try {
-            return getLanguageDao().queryForEq(Language.NAME, refLanguageName).get(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return getLanguageDao().queryForEq(Language.NAME, refLanguageName).get(0);
     }
 
     @Override
@@ -92,20 +72,52 @@ public class LanguageDao extends OrmLiteSqliteOpenHelper {
     }
 
     @Override
-    public void close() {
-        if (usageCounter.decrementAndGet() == 0) {
-            super.close();
-            languageDao = null;
-            helper = null;
+    public Language create(Language object) throws SQLException {
+        int languageId = getLanguageDao().create(object);
+        object.setId(languageId);
+        return object;
+
+    }
+
+    @Override
+    public void remove(int objectId) throws SQLException {
+        getLanguageDao().deleteById(objectId);
+    }
+
+    @Override
+    public void update(Language object) throws SQLException {
+        int rowsUpdated = getLanguageDao().update(object);
+        if (rowsUpdated == 0) {
+            throw new SQLException("No rows were updated");
+        } else if (rowsUpdated > 1) {
+            throw new SQLException("More than one row was updated");
+        }
+
+    }
+
+    @Override
+    public Language get(int objectId) throws SQLException {
+        return getLanguageDao().queryForId(objectId);
+    }
+
+    @Override
+    public List<Language> enumerate() throws SQLException {
+        return getLanguageDao().queryForAll();
+    }
+
+
+    public void createOrUpdate(List<Language> languages) throws SQLException {
+        for (Language language : languages) {
+            List<Language> dbLanguages = getLanguageDao().queryForEq(Language.NAME, language.getName());
+            if (dbLanguages.isEmpty()) {
+                create(language);
+            } else {
+                dbLanguages.get(0).setDescription(language.getDescription());
+                dbLanguages.get(0).setName(language.getName());
+                update(dbLanguages.get(0));
+            }
         }
     }
 
-    public List<Language> queryForAll() {
-        try {
-            return getLanguageDao().queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }

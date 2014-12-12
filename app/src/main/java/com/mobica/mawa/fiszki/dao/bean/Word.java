@@ -1,16 +1,15 @@
-package com.mobica.mawa.fiszki.dao.word;
+package com.mobica.mawa.fiszki.dao.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
 
 @DatabaseTable(tableName = "word")
 public class Word {
 
-    static final String ID = "id";
-    static final String DICT = "dict";
-    static final String BASE_WORD = "base_word";
-    static final String REF_WORD = "ref_word";
+    public static final String ID = "id";
+    public static final String DICT = "dict";
+    public static final String BASE_WORD = "base_word";
+    public static final String REF_WORD = "ref_word";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;

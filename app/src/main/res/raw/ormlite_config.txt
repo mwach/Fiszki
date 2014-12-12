@@ -2,7 +2,7 @@
 # generated on 2014/11/16 04:28:01
 #
 # --table-start--
-dataClass=com.mobica.mawa.fiszki.dao.language.Language
+dataClass=com.mobica.mawa.fiszki.dao.bean.Language
 tableName=language
 # --table-fields-start--
 # --field-start--
@@ -23,7 +23,7 @@ columnName=desc
 # --table-end--
 #################################
 # --table-start--
-dataClass=com.mobica.mawa.fiszki.dao.dictionary.Dictionary
+dataClass=com.mobica.mawa.fiszki.dao.bean.Dictionary
 tableName=dictionary
 # --table-fields-start--
 # --field-start--
@@ -56,7 +56,7 @@ foreign=true
 # --table-end--
 #################################
 # --table-start--
-dataClass=com.mobica.mawa.fiszki.dao.word.Word
+dataClass=com.mobica.mawa.fiszki.dao.bean.Word
 tableName=word
 # --table-fields-start--
 # --field-start--

@@ -1,68 +1,46 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
-import com.mobica.mawa.fiszki.dao.dictionary.DictionaryDao;
-import com.mobica.mawa.fiszki.dao.language.Language;
-import com.mobica.mawa.fiszki.dao.language.LanguageDao;
-import com.mobica.mawa.fiszki.dao.word.Word;
-import com.mobica.mawa.fiszki.dao.word.WordDao;
+import com.mobica.mawa.fiszki.common.AlertHelper;
+import com.mobica.mawa.fiszki.dao.FiszkiDao;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Language;
+import com.mobica.mawa.fiszki.dao.bean.Word;
+import com.mobica.mawa.fiszki.helper.PreferencesHelper;
+import com.mobica.mawa.fiszki.rest.DictionariesService;
+import com.mobica.mawa.fiszki.rest.RestAdapter;
+import com.mobica.mawa.fiszki.rest.dto.Dictionaries;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class RepositoryActivity extends Activity implements Repository {
+import javax.inject.Inject;
 
-    private LanguageDao languageDao = null;
-    private DictionaryDao dictionaryDao = null;
-    private WordDao wordDao = null;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import roboguice.activity.RoboActivity;
+
+public class RepositoryActivity extends RoboActivity implements Repository {
+
+    @Inject
+    FiszkiDao fiszkiDao;
+
+    @Inject
+    RestAdapter restAdapter;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (languageDao != null) {
-            languageDao.close();
-            languageDao = null;
-        }
-        if (dictionaryDao != null) {
-            dictionaryDao.close();
-            dictionaryDao = null;
-        }
-        if (wordDao != null) {
-            wordDao.close();
-            wordDao = null;
-        }
-    }
-
-    private LanguageDao getLanguageDao() {
-        if (languageDao == null) {
-            languageDao =
-                    LanguageDao.getLanguageDao(this);
-        }
-        return languageDao;
-    }
-
-    private DictionaryDao getDictionaryDao() {
-        if (dictionaryDao == null) {
-            dictionaryDao =
-                    DictionaryDao.getDictionaryDao(this);
-        }
-        return dictionaryDao;
-    }
-
-    private WordDao getWordDao() {
-        if (wordDao == null) {
-            wordDao =
-                    WordDao.getWordDao(this);
-        }
-        return wordDao;
+        fiszkiDao.close();
     }
 
     @Override
@@ -95,9 +73,42 @@ public class RepositoryActivity extends Activity implements Repository {
             case R.id.action_home:
                 showMainMenu();
                 return true;
+            case R.id.action_download:
+                downloadDictionaries();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void downloadDictionaries() {
+        DictionariesService ls = restAdapter.create(DictionariesService.class);
+
+        ls.enumerate(
+                PreferencesHelper.getBaseLanguage(this),
+                PreferencesHelper.getRefLanguage(this),
+                new Callback<Dictionaries>() {
+                    @Override
+                    public void success(Dictionaries dictionaries, Response response) {
+                        if (dictionaries != null && dictionaries.dictionaries != null) {
+                            showDownloadDictionaries(dictionaries);
+                        } else {
+                            AlertHelper.showError(RepositoryActivity.this, RepositoryActivity.this.getString(R.string.noDataAvailableOnServer));
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        AlertHelper.showError(RepositoryActivity.this, String.format(RepositoryActivity.this.getString(R.string.couldNotRetrieveLanguages), error.getLocalizedMessage()));
+                    }
+                });
+
+    }
+
+    private void showDownloadDictionaries(Dictionaries dictionaries) {
+        getFragmentManager().beginTransaction().
+                replace(R.id.container, WebDictionariesFragment.newInstance(dictionaries))
+                .commit();
     }
 
     private void showMainMenu() {
@@ -128,12 +139,23 @@ public class RepositoryActivity extends Activity implements Repository {
 
     @Override
     public void deleteDictionary(int id) {
-        getDictionaryDao().delete(id);
+        try {
+            fiszkiDao.getWordDao().removeDictionary(id);
+            fiszkiDao.getDictionaryDao().remove(id);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "deleteDictionary", e);
+            AlertHelper.showError(this, getString(R.string.couldNotDeleteDictionary));
+        }
     }
 
     @Override
     public void deleteWord(int id) {
-        getWordDao().delete(id);
+        try {
+            fiszkiDao.getDictionaryDao().remove(id);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "deleteWord", e);
+            AlertHelper.showError(this, getString(R.string.couldNotDeleteWord));
+        }
 
     }
 
@@ -148,32 +170,66 @@ public class RepositoryActivity extends Activity implements Repository {
     public void addDictionary(Dictionary dictionary) {
         dictionary.setBaseLanguage(new Language(getBaseLanguage(), null, null));
         dictionary.setRefLanguage(new Language(getRefLanguage(), null, null));
-        getDictionaryDao().add(dictionary);
+        try {
+            fiszkiDao.getDictionaryDao().create(dictionary);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "addDictionary", e);
+            AlertHelper.showError(this, getString(R.string.couldNotCreateDir));
+        }
     }
 
     @Override
     public void addWord(Word word) {
-        getWordDao().add(word);
+        try {
+            fiszkiDao.getWordDao().create(word);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "addWord", e);
+            AlertHelper.showError(this, getString(R.string.couldNotCreateWord));
+        }
     }
 
     @Override
     public int getBaseLanguage() {
-        return getLanguageDao().getBaseLanguage().getId();
+        try {
+            return fiszkiDao.getLanguageDao().getBaseLanguage().getId();
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "geBaseLanguage", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveBaseLanguage));
+        }
+        return 0;
     }
 
     @Override
     public int getRefLanguage() {
-        return getLanguageDao().getRefLanguage().getId();
+        try {
+            return fiszkiDao.getLanguageDao().getRefLanguage().getId();
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "geRefLanguage", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveRefLanguage));
+        }
+        return 0;
     }
 
     @Override
     public List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage) {
-        return getDictionaryDao().getListOfDictionaries(baseLanguage, refLanguage);
+        try {
+            return fiszkiDao.getDictionaryDao().enumerate(baseLanguage, refLanguage);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "getListOfDictionaries", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveDictionaries));
+        }
+        return null;
     }
 
     @Override
     public List<Word> showWords(int dictionary) {
-        return getWordDao().load(dictionary);
+        try {
+            return fiszkiDao.getWordDao().enumerate(dictionary);
+        } catch (SQLException e) {
+            Log.e(RepositoryActivity.class.getName(), "showWords", e);
+            AlertHelper.showError(this, getString(R.string.couldNotRetrieveWords));
+        }
+        return null;
     }
 
 }

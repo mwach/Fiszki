@@ -1,4 +1,4 @@
-package com.mobica.mawa.fiszki.dao.language;
+package com.mobica.mawa.fiszki.dao.bean;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -9,9 +9,9 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "language")
 public class Language {
 
-    static final String ID = "id";
-    static final String NAME = "name";
-    static final String DESC = "desc";
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String DESC = "desc";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
@@ -20,10 +20,10 @@ public class Language {
     @DatabaseField(columnName = DESC)
     private String description;
 
-    public Language(){
+    public Language() {
     }
 
-    public Language(int id, String name, String description){
+    public Language(int id, String name, String description) {
         setId(id);
         setName(name);
         setDescription(description);

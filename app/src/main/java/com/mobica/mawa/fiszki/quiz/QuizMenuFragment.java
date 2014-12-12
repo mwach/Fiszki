@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 
 import java.util.List;
 
@@ -68,9 +68,8 @@ public class QuizMenuFragment extends RoboFragment {
 
     private void populateSpinner(Context rootItem, Spinner spinner, List<Dictionary> items) {
 
-        ArrayAdapter<Dictionary> adapter =
-                new ArrayAdapter<Dictionary>(rootItem,
-                        android.R.layout.simple_spinner_item, items);
+        ArrayAdapter<Dictionary> adapter = new DictionaryAdapter(rootItem,
+                android.R.layout.simple_spinner_item, items);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 
 import roboguice.fragment.provided.RoboFragment;
 import roboguice.inject.InjectView;

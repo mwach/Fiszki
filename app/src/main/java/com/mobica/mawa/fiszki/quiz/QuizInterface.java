@@ -1,6 +1,6 @@
 package com.mobica.mawa.fiszki.quiz;
 
-import com.mobica.mawa.fiszki.dao.dictionary.Dictionary;
+import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 
 import java.util.List;
 

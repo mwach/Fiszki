@@ -1,7 +1,6 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +11,24 @@ import android.widget.ListView;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.common.AdapterClickListener;
 import com.mobica.mawa.fiszki.common.DefaultArrayAdapter;
-import com.mobica.mawa.fiszki.dao.word.Word;
+import com.mobica.mawa.fiszki.dao.bean.Word;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
+
 /**
  */
-public class WordsListFragment extends Fragment implements AdapterClickListener {
+public class WordsListFragment extends RoboFragment implements AdapterClickListener {
     private static final String DICTIONARY_ID = "DICTIONARY_ID";
     private Repository repository;
+
+    @InjectView(R.id.wordsList)
+    private ListView wordsList;
+    @InjectView(R.id.add_word)
+    private ImageButton addWordButton;
 
     public WordsListFragment() {
         // Required empty public constructor
@@ -64,7 +71,12 @@ public class WordsListFragment extends Fragment implements AdapterClickListener 
         if (getActivity() != null && getActivity().getActionBar() != null) {
             getActivity().getActionBar().setTitle(R.string.available_words);
         }
-        final ListView listview = (ListView) rootView.findViewById(R.id.wordsList);
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         final int dictionary = getArguments().getInt(DICTIONARY_ID);
         List<Word> words = getRepository().showWords(dictionary);
@@ -77,22 +89,18 @@ public class WordsListFragment extends Fragment implements AdapterClickListener 
             values.add(word.getBaseWord());
         }
 
-        final DefaultArrayAdapter adapter = new DefaultArrayAdapter(repository, ids, values, this);
-        listview.setAdapter(adapter);
+        wordsList.setAdapter(new DefaultArrayAdapter(repository, ids, values, this));
 
-        ImageButton button = (ImageButton) rootView.findViewById(R.id.add_word);
-        button.setOnClickListener(new View.OnClickListener() {
+        addWordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getRepository().showAddWord(dictionary);
             }
         });
-        return rootView;
     }
 
     @Override
     public void textClicked(int position) {
-
     }
 
     @Override

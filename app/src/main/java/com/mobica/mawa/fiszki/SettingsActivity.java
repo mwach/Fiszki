@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.mobica.mawa.fiszki.common.AlertHelper;
 import com.mobica.mawa.fiszki.dao.FiszkiDao;
 import com.mobica.mawa.fiszki.dao.bean.Language;
+import com.mobica.mawa.fiszki.helper.NetworkHelper;
 import com.mobica.mawa.fiszki.helper.ObjectHelper;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 import com.mobica.mawa.fiszki.rest.LanguagesService;
@@ -110,6 +111,12 @@ public class SettingsActivity extends RoboActivity {
 
     private void refresh() {
 
+        if (!NetworkHelper.isNetworkAvailable(this)) {
+            AlertHelper.showInfo(SettingsActivity.this,
+                    SettingsActivity.this.getString(R.string.networkDisabled),
+                    SettingsActivity.this.getString(R.string.pleaseEnableNetwork));
+            return;
+        }
         LanguagesService ls = restAdapter.create(LanguagesService.class);
         ls.enumerate(new Callback<Languages>() {
             @Override
@@ -164,8 +171,11 @@ public class SettingsActivity extends RoboActivity {
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            String selectedLanguage = ((TextView) view).getText().toString();
-            PreferencesHelper.setProperty(context, propertyName, selectedLanguage);
+            TextView selectedItem = (TextView) view;
+            if (selectedItem != null && selectedItem.getText() != null) {
+                String selectedLanguage = selectedItem.getText().toString();
+                PreferencesHelper.setProperty(context, propertyName, selectedLanguage);
+            }
         }
 
         @Override

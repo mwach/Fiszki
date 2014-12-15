@@ -20,7 +20,7 @@
     <string name="quizUnknownResponse">I didn\'t know</string>
     <string name="mainMenu">Main menu</string>
     <string name="title_activity_repository">Dictionary</string>
-    <string name="available_dictionaries">Available dictionaries</string>
+    <string name="dictionaries">Dictionaries</string>
     <string name="remove">Remove</string>
     <string name="x">X</string>
     <string name="add_dictionary">Add dictionary</string>
@@ -63,4 +63,6 @@
     <string name="info">Information</string>
     <string name="error">Error</string>
     <string name="dictionaryDownloaded">Dictionary successfully downloaded</string>
+    <string name="networkDisabled">Network is disabled</string>
+    <string name="pleaseEnableNetwork">Please enable network data first</string>
 </resources>

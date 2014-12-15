@@ -3,9 +3,11 @@ package com.mobica.mawa.fiszki.reporsitory;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.mobica.mawa.fiszki.R;
@@ -27,8 +29,8 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
 
     @InjectView(R.id.wordsList)
     private ListView wordsList;
-    @InjectView(R.id.add_word)
-    private ImageButton addWordButton;
+
+    private int dictionary;
 
     public WordsListFragment() {
         // Required empty public constructor
@@ -63,6 +65,12 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.repository_word, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -71,6 +79,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
         if (getActivity() != null && getActivity().getActionBar() != null) {
             getActivity().getActionBar().setTitle(R.string.available_words);
         }
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -78,7 +87,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final int dictionary = getArguments().getInt(DICTIONARY_ID);
+        dictionary = getArguments().getInt(DICTIONARY_ID);
         List<Word> words = getRepository().showWords(dictionary);
 
         List<Integer> ids = new ArrayList<Integer>();
@@ -90,13 +99,17 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
         }
 
         wordsList.setAdapter(new DefaultArrayAdapter(repository, ids, values, this));
+    }
 
-        addWordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_word:
                 getRepository().showAddWord(dictionary);
-            }
-        });
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

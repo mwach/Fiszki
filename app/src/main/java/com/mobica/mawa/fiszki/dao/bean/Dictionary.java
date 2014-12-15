@@ -24,9 +24,9 @@ public class Dictionary {
     private String description;
     @DatabaseField(columnName = UUID)
     private String uuid;
-    @DatabaseField(canBeNull = false, foreign = true, columnName = BASE_LANG)
+    @DatabaseField(canBeNull = false, foreign = true, columnName = BASE_LANG, columnDefinition = "integer references language(id) on delete cascade")
     private Language baseLanguage;
-    @DatabaseField(canBeNull = false, foreign = true, columnName = REF_LANG)
+    @DatabaseField(canBeNull = false, foreign = true, columnName = REF_LANG, columnDefinition = "integer references language(id) on delete cascade")
     private Language refLanguage;
 
     public Dictionary() {

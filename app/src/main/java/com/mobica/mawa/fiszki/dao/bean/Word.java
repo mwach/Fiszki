@@ -13,7 +13,7 @@ public class Word {
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
-    @DatabaseField(canBeNull = false, foreign = true, columnName = DICT)
+    @DatabaseField(canBeNull = false, foreign = true, columnName = DICT, columnDefinition = "integer references dictionary(id) on delete cascade")
     private Dictionary dictionary;
     @DatabaseField(canBeNull = false, columnName = BASE_WORD)
     private String baseWord;

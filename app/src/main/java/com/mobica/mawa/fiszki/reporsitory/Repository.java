@@ -37,4 +37,6 @@ public interface Repository {
     List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage);
 
     List<Word> showWords(int dictionary);
+
+    void downloadDictionaries();
 }

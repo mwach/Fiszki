@@ -1,5 +1,5 @@
 #
-# generated on 2014/11/16 04:28:01
+# generated on 2014/12/15 07:07:37
 #
 # --table-start--
 dataClass=com.mobica.mawa.fiszki.dao.bean.Language
@@ -41,16 +41,22 @@ fieldName=description
 columnName=desc
 # --field-end--
 # --field-start--
+fieldName=uuid
+columnName=uuid
+# --field-end--
+# --field-start--
 fieldName=baseLanguage
 columnName=base_lang
 canBeNull=false
 foreign=true
+columnDefinition=integer references language(id) on delete cascade
 # --field-end--
 # --field-start--
 fieldName=refLanguage
 columnName=ref_lang
 canBeNull=false
 foreign=true
+columnDefinition=integer references language(id) on delete cascade
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -69,6 +75,7 @@ fieldName=dictionary
 columnName=dict
 canBeNull=false
 foreign=true
+columnDefinition=integer references dictionary(id) on delete cascade
 # --field-end--
 # --field-start--
 fieldName=baseWord

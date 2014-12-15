@@ -10,17 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mobica.mawa.fiszki.reporsitory.WordsListFragment">
 
-    <ImageButton
-        android:id="@+id/add_word"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:background="@null"
-        android:contentDescription="@string/add_word"
-        android:src="@drawable/add"
-        android:text="@string/add_word" />
-
     <ListView
         android:id="@+id/wordsList"
         android:layout_width="match_parent"

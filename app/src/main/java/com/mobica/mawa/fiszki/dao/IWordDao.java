@@ -12,7 +12,5 @@ public interface IWordDao extends Crud<Word> {
 
     public List<Word> enumerate(int dictionaryId) throws SQLException;
 
-    public void removeDictionary(int id) throws SQLException;
-
     public void create(List<Word> dbWords) throws SQLException;
 }

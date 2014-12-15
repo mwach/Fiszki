@@ -9,17 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mobica.mawa.fiszki.reporsitory.DictionariesListFragment">
 
-    <ImageButton
-        android:id="@+id/add_dictionary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:background="@null"
-        android:contentDescription="@string/add_dictionary"
-        android:src="@drawable/add"
-        android:text="@string/add_dictionary" />
-
     <ListView
         android:id="@+id/dictionariesList"
         android:layout_width="match_parent"

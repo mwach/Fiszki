@@ -96,7 +96,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
             return;
         }
 
-        List<Word> filteredWords = filterWords(dbWords, noOfQuestions);
+        dbWords = filterWords(dbWords, noOfQuestions);
 
         Bundle bundle = new Bundle();
         bundle.putInt(QuestionFragmentInterface.NO_OF_QUESTIONS, dbWords.size());
@@ -114,7 +114,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         List<Word> response = new ArrayList<Word>();
         //, noOfQuestions
         Random random = new Random();
-        while (dbWords.size() < limit) {
+        while (response.size() < limit) {
             response.add(dbWords.get(random.nextInt(dbWords.size())));
         }
         return response;

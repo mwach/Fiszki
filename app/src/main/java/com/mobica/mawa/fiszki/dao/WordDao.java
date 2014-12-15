@@ -2,7 +2,6 @@ package com.mobica.mawa.fiszki.dao;
 
 import android.content.Context;
 
-import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
@@ -29,15 +28,6 @@ class WordDao extends AbstractDao<Word> implements IWordDao {
         PreparedQuery<Word> preparedQuery = qb.prepare();
         List<Word> dbWords = getDao().query(preparedQuery);
         return dbWords;
-    }
-
-    @Override
-    public void removeDictionary(int id) throws SQLException {
-        DeleteBuilder<Word, Integer> db = getDao().deleteBuilder();
-        Where where = db.where();
-        where.eq(Word.DICT, id);
-
-        getDao().delete(db.prepare());
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.mobica.mawa.fiszki.dao;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -22,7 +24,7 @@ import java.util.List;
  */
 public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "Fiszki.db";
 
     private Class<T> type;
@@ -59,6 +61,15 @@ public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
         } catch (SQLException e) {
             Log.e(AbstractDao.class.getName(), "Can't drop databases", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            db.setForeignKeyConstraintsEnabled(true);
         }
     }
 

@@ -1,19 +1,16 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.mobica.mawa.fiszki.MainScreen;
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.common.AlertHelper;
 import com.mobica.mawa.fiszki.dao.FiszkiDao;
 import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 import com.mobica.mawa.fiszki.dao.bean.Language;
 import com.mobica.mawa.fiszki.dao.bean.Word;
+import com.mobica.mawa.fiszki.helper.NetworkHelper;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 import com.mobica.mawa.fiszki.rest.DictionariesService;
 import com.mobica.mawa.fiszki.rest.RestAdapter;
@@ -56,32 +53,16 @@ public class RepositoryActivity extends RoboActivity implements Repository {
                 .commit();
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.repository, menu);
-        return true;
-    }
+    public void downloadDictionaries() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_home:
-                showMainMenu();
-                return true;
-            case R.id.action_download:
-                downloadDictionaries();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (!NetworkHelper.isNetworkAvailable(this)) {
+            AlertHelper.showInfo(RepositoryActivity.this,
+                    RepositoryActivity.this.getString(R.string.networkDisabled),
+                    RepositoryActivity.this.getString(R.string.pleaseEnableNetwork));
+            return;
         }
-    }
 
-    private void downloadDictionaries() {
         DictionariesService ls = restAdapter.create(DictionariesService.class);
 
         ls.enumerate(
@@ -111,13 +92,6 @@ public class RepositoryActivity extends RoboActivity implements Repository {
                 .commit();
     }
 
-    private void showMainMenu() {
-        Intent mainMenuIntent = new Intent(this, MainScreen.class);
-        mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainMenuIntent);
-    }
-
-
     @Override
     public Context getContext() {
         return this;
@@ -140,7 +114,6 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     @Override
     public void deleteDictionary(int id) {
         try {
-            fiszkiDao.getWordDao().removeDictionary(id);
             fiszkiDao.getDictionaryDao().remove(id);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "deleteDictionary", e);

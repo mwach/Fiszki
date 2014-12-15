@@ -108,7 +108,7 @@ public class SettingsActivity extends RoboActivity {
         return languages;
     }
 
-    public void refresh() {
+    private void refresh() {
 
         LanguagesService ls = restAdapter.create(LanguagesService.class);
         ls.enumerate(new Callback<Languages>() {

@@ -144,7 +144,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             fiszkiDao.getDictionaryDao().remove(id);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "deleteDictionary", e);
-            AlertHelper.showError(this, getString(R.string.couldNotDeleteDictionary));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotDeleteDictionary));
         }
     }
 
@@ -154,7 +154,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             fiszkiDao.getDictionaryDao().remove(id);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "deleteWord", e);
-            AlertHelper.showError(this, getString(R.string.couldNotDeleteWord));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotDeleteWord));
         }
 
     }
@@ -174,7 +174,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             fiszkiDao.getDictionaryDao().create(dictionary);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "addDictionary", e);
-            AlertHelper.showError(this, getString(R.string.couldNotCreateDir));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotCreateDir));
         }
     }
 
@@ -184,7 +184,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             fiszkiDao.getWordDao().create(word);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "addWord", e);
-            AlertHelper.showError(this, getString(R.string.couldNotCreateWord));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotCreateWord));
         }
     }
 
@@ -194,7 +194,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             return fiszkiDao.getLanguageDao().getBaseLanguage().getId();
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "geBaseLanguage", e);
-            AlertHelper.showError(this, getString(R.string.couldNotRetrieveBaseLanguage));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveBaseLanguage));
         }
         return 0;
     }
@@ -205,7 +205,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             return fiszkiDao.getLanguageDao().getRefLanguage().getId();
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "geRefLanguage", e);
-            AlertHelper.showError(this, getString(R.string.couldNotRetrieveRefLanguage));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveRefLanguage));
         }
         return 0;
     }
@@ -216,7 +216,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             return fiszkiDao.getDictionaryDao().enumerate(baseLanguage, refLanguage);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "getListOfDictionaries", e);
-            AlertHelper.showError(this, getString(R.string.couldNotRetrieveDictionaries));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveDictionaries));
         }
         return null;
     }
@@ -227,7 +227,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             return fiszkiDao.getWordDao().enumerate(dictionary);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "showWords", e);
-            AlertHelper.showError(this, getString(R.string.couldNotRetrieveWords));
+            AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveWords));
         }
         return null;
     }

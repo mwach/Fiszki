@@ -97,6 +97,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
             public void success(Words words, Response response) {
                 if (words != null && words.words != null) {
                     addDictionary(dictionary, words.words);
+                    AlertHelper.showInfo(context, context.getString(R.string.info), context.getString(R.string.dictionaryDownloaded));
                 } else {
                     AlertHelper.showError(context, context.getString(R.string.noDataAvailableOnServer));
                 }
@@ -114,7 +115,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
             Language baseLanguage = fiszkiDao.getLanguageDao().getBaseLanguage();
             Language refLanguage = fiszkiDao.getLanguageDao().getRefLanguage();
             com.mobica.mawa.fiszki.dao.bean.Dictionary dbDictionary = ObjectHelper.fromDictionaryDto(dictionary, baseLanguage, refLanguage);
-            fiszkiDao.getDictionaryDao().create(dbDictionary);
+            dbDictionary = fiszkiDao.getDictionaryDao().create(dbDictionary);
             List<Word> dbWords = ObjectHelper.fromWordDto(words, dbDictionary);
             fiszkiDao.getWordDao().create(dbWords);
         } catch (SQLException exc) {

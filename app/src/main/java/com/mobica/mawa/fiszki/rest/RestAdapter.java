@@ -2,7 +2,7 @@ package com.mobica.mawa.fiszki.rest;
 
 import android.content.Context;
 
-import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class RestAdapter {
     private retrofit.RestAdapter restAdapter;
 
     public synchronized <T> T create(Class<T> service) {
-        String endpointUrl = context.getString(R.string.endpointURL);
+        String endpointUrl = PreferencesHelper.getServerURL(context);
 
         if (restAdapter == null) {
             restAdapter = new retrofit.RestAdapter.Builder()

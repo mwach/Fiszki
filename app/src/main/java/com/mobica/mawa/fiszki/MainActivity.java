@@ -10,7 +10,7 @@ import android.view.View;
 import com.mobica.mawa.fiszki.quiz.QuizActivity;
 import com.mobica.mawa.fiszki.reporsitory.RepositoryActivity;
 
-public class MainScreen extends Activity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

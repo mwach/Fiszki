@@ -13,6 +13,7 @@ public final class PreferencesHelper {
     public static final String BASE_LANGUAGE = "BASE_LANGUAGE";
     public static final String REF_LANGUAGE = "REF_LANGUAGE";
     public static final String QUIZ_NO_OF_QUESTIONS = "NO_OF_QUESTIONS";
+    public static final String SERVER_URL = "SERVER_URL";
 
     private PreferencesHelper() {
     }
@@ -26,6 +27,13 @@ public final class PreferencesHelper {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
         return sharedPref.getString(REF_LANGUAGE, "");
     }
+
+    public static String getServerURL(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+        String defaultUrl = context.getString(R.string.endpointURL);
+        return sharedPref.getString(SERVER_URL, defaultUrl);
+    }
+
 
     public static int getNumberOfQuestions(Context activity) {
         SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.app_name), Context.MODE_PRIVATE);

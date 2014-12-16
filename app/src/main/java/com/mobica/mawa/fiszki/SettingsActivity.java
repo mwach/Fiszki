@@ -3,12 +3,15 @@ package com.mobica.mawa.fiszki;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,6 +47,8 @@ public class SettingsActivity extends RoboActivity {
     private Spinner baseLanguageSpinner;
     @InjectView(R.id.spinnerRefLanguage)
     private Spinner refLanguageSpinner;
+    @InjectView(R.id.editTextServerUrl)
+    private EditText editTextServerUrl;
 
     @Override
     protected void onDestroy() {
@@ -81,6 +86,10 @@ public class SettingsActivity extends RoboActivity {
         String refLanguage = PreferencesHelper.getRefLanguage(this);
         refLanguageSpinner.setSelection(languages.indexOf(refLanguage));
         refLanguageSpinner.setOnItemSelectedListener(new SpinnerListener(this, PreferencesHelper.REF_LANGUAGE));
+
+        String serverURL = PreferencesHelper.getServerURL(this);
+        editTextServerUrl.setText(serverURL);
+        editTextServerUrl.addTextChangedListener(new EditTextListener(this, PreferencesHelper.SERVER_URL));
     }
 
     private void populateSpinner(Spinner spinner, List<String> items) {
@@ -147,7 +156,7 @@ public class SettingsActivity extends RoboActivity {
 
         switch (item.getItemId()) {
             case R.id.action_home:
-                Intent homeIntent = new Intent(this, MainScreen.class);
+                Intent homeIntent = new Intent(this, MainActivity.class);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
                 return true;
@@ -159,7 +168,7 @@ public class SettingsActivity extends RoboActivity {
         }
     }
 
-    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+    private static class SpinnerListener implements AdapterView.OnItemSelectedListener {
 
         private Context context;
         private String propertyName;
@@ -180,6 +189,36 @@ public class SettingsActivity extends RoboActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    }
+
+    private static class EditTextListener implements TextWatcher {
+
+        private Context context;
+        private String propertyName;
+
+        public EditTextListener(Context context, String propertyName) {
+            this.context = context;
+            this.propertyName = propertyName;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable != null) {
+                String url = editable.toString();
+                PreferencesHelper.setProperty(context, propertyName, url);
+            }
 
         }
     }

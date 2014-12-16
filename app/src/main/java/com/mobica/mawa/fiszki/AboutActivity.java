@@ -31,7 +31,7 @@ public class AboutActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_home:
-                Intent homeIntent = new Intent(this, MainScreen.class);
+                Intent homeIntent = new Intent(this, MainActivity.class);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
             default:

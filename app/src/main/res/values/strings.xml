@@ -67,4 +67,5 @@
     <string name="pleaseEnableNetwork">Please enable network data first</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
+    <string name="serverURL">Server URL</string>
 </resources>

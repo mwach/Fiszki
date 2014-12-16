@@ -59,7 +59,12 @@ public class QuizMenuFragment extends RoboFragment {
         populateSpinner(view.getContext(), spinner, dictionaries);
         editTextNoOfQuestions.setText(String.valueOf(quiz.getNumberOfQuestions()));
 
-        startQuizButton.setOnClickListener(new QuizMenuClickListener());
+        startQuizButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startQuiz();
+            }
+        });
         if (dictionaries.isEmpty()) {
             startQuizButton.setEnabled(false);
         }
@@ -81,20 +86,4 @@ public class QuizMenuFragment extends RoboFragment {
         Dictionary selectedDict = (Dictionary) spinner.getSelectedItem();
         quiz.startQuiz(noOfQuestions, selectedDict.getId());
     }
-
-    private class QuizMenuClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-
-            switch (view.getId()) {
-                case R.id.startQuizButton:
-                    startQuiz();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
 }

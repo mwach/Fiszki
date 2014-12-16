@@ -20,14 +20,14 @@ import java.util.List;
 public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
 
     private Context context;
-    private List<Dictionary> ids;
+    private List<Dictionary> dictionaries;
     private DownloadAdapterClickListener adapterClickListener;
 
-    public DownloadArrayAdapter(Context context, List<Dictionary> ids,
+    public DownloadArrayAdapter(Context context, List<Dictionary> dictionaries,
                                 DownloadAdapterClickListener adapterClickListener) {
-        super(context, R.layout.downloadrowlayout, ids);
+        super(context, R.layout.downloadrowlayout, dictionaries);
         this.context = context;
-        this.ids = ids;
+        this.dictionaries = dictionaries;
         this.adapterClickListener = adapterClickListener;
     }
 
@@ -40,11 +40,11 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
         setRowBackgroundColor(rowView, position);
 
         TextView tv = (TextView) rowView.findViewById(R.id.rowlayoutTextView);
-        tv.setText(ids.get(position).getName());
+        tv.setText(dictionaries.get(position).getName());
         ImageButton downloadImageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutDownloadButton);
-        downloadImageButton.setOnClickListener(new DownloadClickListener(ids.get(position)));
+        downloadImageButton.setOnClickListener(new DownloadClickListener(dictionaries.get(position)));
         ImageButton infoImageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutInfoButton);
-        infoImageButton.setOnClickListener(new InfoClickListener(ids.get(position)));
+        infoImageButton.setOnClickListener(new InfoClickListener(dictionaries.get(position)));
         return rowView;
     }
 
@@ -53,9 +53,9 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
         int sdk = Build.VERSION.SDK_INT;
         if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
             //noinspection deprecation
-            rowView.setBackgroundDrawable(context.getResources().getDrawable(((position % 2) == 1) ? R.color.lightblue : R.color.darklightblue));
+            rowView.setBackgroundDrawable(context.getResources().getDrawable(((position % 2) == 1) ? R.color.white : R.color.lightgray));
         } else {
-            rowView.setBackground(context.getResources().getDrawable(((position % 2) == 1) ? R.color.lightblue : R.color.darklightblue));
+            rowView.setBackground(context.getResources().getDrawable(((position % 2) == 1) ? R.color.white : R.color.lightgray));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import roboguice.inject.InjectView;
 public class WordsListFragment extends RoboFragment implements AdapterClickListener {
     private static final String DICTIONARY_ID = "DICTIONARY_ID";
     private Repository repository;
+    private Context context;
 
     @InjectView(R.id.wordsList)
     private ListView wordsList;
@@ -61,6 +63,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.context = activity;
         setRepository((Repository) activity);
     }
 
@@ -88,7 +91,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
         super.onViewCreated(view, savedInstanceState);
 
         dictionary = getArguments().getInt(DICTIONARY_ID);
-        List<Word> words = getRepository().showWords(dictionary);
+        List<Word> words = getRepository().getWords(dictionary);
 
         List<Integer> ids = new ArrayList<Integer>();
         List<String> values = new ArrayList<String>();
@@ -98,7 +101,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
             values.add(word.getBaseWord());
         }
 
-        wordsList.setAdapter(new DefaultArrayAdapter(repository, ids, values, this));
+        wordsList.setAdapter(new DefaultArrayAdapter(context, ids, values, this));
     }
 
     @Override

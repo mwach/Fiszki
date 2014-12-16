@@ -9,5 +9,6 @@
     <dimen name="activity_word_small_size">24sp</dimen>
     <dimen name="activity_word_small_size_xx">18sp</dimen>
     <dimen name="activity_word_small_size_xxx">16sp</dimen>
+    <dimen name="activity_double_vertical_margin">32dp</dimen>
 
 </resources>

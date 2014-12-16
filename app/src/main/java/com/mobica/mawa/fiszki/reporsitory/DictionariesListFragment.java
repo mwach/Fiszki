@@ -1,6 +1,7 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import roboguice.inject.InjectView;
 public class DictionariesListFragment extends RoboFragment implements AdapterClickListener {
 
     private Repository repository;
+    private Context context;
 
     @InjectView(R.id.dictionariesList)
     private ListView dictionariesListView;
@@ -50,6 +52,7 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.context = activity;
         setRepository((Repository) activity);
     }
 
@@ -79,7 +82,7 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
         int baseLanguage = getRepository().getBaseLanguage();
         int refLanguage = getRepository().getRefLanguage();
 
-        List<Dictionary> dictionaries = getRepository().getListOfDictionaries(baseLanguage, refLanguage);
+        List<Dictionary> dictionaries = getRepository().getDictionaries(baseLanguage, refLanguage);
 
         List<Integer> ids = new ArrayList<Integer>();
         List<String> values = new ArrayList<String>();
@@ -87,7 +90,7 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
             values.add(dict.getName());
             ids.add(dict.getId());
         }
-        DefaultArrayAdapter adapter = new DefaultArrayAdapter(getRepository(), ids, values, this);
+        DefaultArrayAdapter adapter = new DefaultArrayAdapter(context, ids, values, this);
         dictionariesListView.setAdapter(adapter);
     }
 
@@ -98,7 +101,7 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_download:
-                repository.downloadDictionaries();
+                repository.showDownloadDictionaries();
                 return true;
             case R.id.action_add:
                 repository.showAddDictionary();
@@ -110,7 +113,7 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
 
     @Override
     public void textClicked(int position) {
-        repository.loadDictionary(position);
+        repository.showWords(position);
     }
 
     @Override

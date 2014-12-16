@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/activity_triple_vertical_margin"
+        android:layout_marginTop="@dimen/activity_double_vertical_margin"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:background="@color/green"
-            android:contentDescription="@string/quizKnownResponse"
+            android:contentDescription="@string/add"
             android:src="@drawable/ok" />
 
         <ImageButton
@@ -56,7 +56,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:background="@color/red"
-            android:contentDescription="@string/quizUnknownResponse"
+            android:contentDescription="@string/cancel"
             android:src="@drawable/cancel" />
     </LinearLayout>
 

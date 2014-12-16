@@ -1,30 +1,30 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
-import android.content.Context;
-
 import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 import com.mobica.mawa.fiszki.dao.bean.Word;
 
 import java.util.List;
 
 /**
+ * Repository interface
+ * Used by the repository part of the application
  * Created by mawa on 2014-10-26.
  */
 public interface Repository {
 
-    public Context getContext();
-
-    public void loadDictionary(int dictionaryId);
+    public void showWords(int dictionaryId);
 
     public void showDictionaries();
 
     public void showAddWord(int dictionary);
 
+    public void showAddDictionary();
+
+    void showDownloadDictionaries();
+
     public void deleteDictionary(int integer);
 
     public void deleteWord(int position);
-
-    public void showAddDictionary();
 
     public void addDictionary(Dictionary dictionary);
 
@@ -34,9 +34,7 @@ public interface Repository {
 
     int getRefLanguage();
 
-    List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage);
+    List<Dictionary> getDictionaries(int baseLanguage, int refLanguage);
 
-    List<Word> showWords(int dictionary);
-
-    void downloadDictionaries();
+    List<Word> getWords(int dictionary);
 }

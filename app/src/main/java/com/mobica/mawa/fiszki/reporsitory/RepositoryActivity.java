@@ -1,6 +1,5 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -28,11 +27,14 @@ import roboguice.activity.RoboActivity;
 
 public class RepositoryActivity extends RoboActivity implements Repository {
 
+    private static final String FRAGMENT = "FRAGMENT";
+    private static final String DICTIONARY = "DICTIONARY";
     @Inject
     FiszkiDao fiszkiDao;
-
     @Inject
     RestAdapter restAdapter;
+    private RepositoryFragment currentFragment = RepositoryFragment.DictionariesList;
+    private int dictionaryId = 0;
 
     @Override
     protected void onDestroy() {
@@ -44,18 +46,48 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repository);
-        showDictionaries();
+
+        if (savedInstanceState != null) {
+            currentFragment = RepositoryFragment.valueOf(savedInstanceState.getString(FRAGMENT));
+            dictionaryId = savedInstanceState.getInt(DICTIONARY);
+        }
+        switch (currentFragment) {
+            case AddDictionary:
+                showAddDictionary();
+                break;
+            case DownloadDictionaries:
+                showDownloadDictionaries();
+                break;
+            case WordsList:
+                getWords(dictionaryId);
+                break;
+            case AddWord:
+                showAddWord(dictionaryId);
+                break;
+            case DictionariesList:
+            default:
+                showDictionaries();
+                break;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(FRAGMENT, currentFragment.name());
+        outState.putInt(DICTIONARY, dictionaryId);
+        super.onSaveInstanceState(outState);
     }
 
     public void showDictionaries() {
+        currentFragment = RepositoryFragment.DictionariesList;
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, DictionariesListFragment.newInstance())
                 .commit();
     }
 
     @Override
-    public void downloadDictionaries() {
-
+    public void showDownloadDictionaries() {
+        currentFragment = RepositoryFragment.DownloadDictionaries;
         if (!NetworkHelper.isNetworkAvailable(this)) {
             AlertHelper.showInfo(RepositoryActivity.this,
                     RepositoryActivity.this.getString(R.string.networkDisabled),
@@ -72,7 +104,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
                     @Override
                     public void success(Dictionaries dictionaries, Response response) {
                         if (dictionaries != null && dictionaries.dictionaries != null) {
-                            showDownloadDictionaries(dictionaries);
+                            showDownloadedDictionaries(dictionaries);
                         } else {
                             AlertHelper.showError(RepositoryActivity.this, RepositoryActivity.this.getString(R.string.noDataAvailableOnServer));
                         }
@@ -86,19 +118,16 @@ public class RepositoryActivity extends RoboActivity implements Repository {
 
     }
 
-    private void showDownloadDictionaries(Dictionaries dictionaries) {
+    private void showDownloadedDictionaries(Dictionaries dictionaries) {
         getFragmentManager().beginTransaction().
                 replace(R.id.container, WebDictionariesFragment.newInstance(dictionaries))
                 .commit();
     }
 
     @Override
-    public Context getContext() {
-        return this;
-    }
-
-    @Override
-    public void loadDictionary(int dictionaryId) {
+    public void showWords(int dictionaryId) {
+        currentFragment = RepositoryFragment.WordsList;
+        this.dictionaryId = dictionaryId;
         getFragmentManager().beginTransaction().
                 replace(R.id.container, WordsListFragment.newInstance(dictionaryId))
                 .commit();
@@ -106,8 +135,18 @@ public class RepositoryActivity extends RoboActivity implements Repository {
 
     @Override
     public void showAddWord(int dictionary) {
+        currentFragment = RepositoryFragment.AddWord;
+        this.dictionaryId = dictionary;
         getFragmentManager().beginTransaction().
                 replace(R.id.container, AddWordFragment.newInstance(dictionary))
+                .commit();
+    }
+
+    @Override
+    public void showAddDictionary() {
+        currentFragment = RepositoryFragment.AddDictionary;
+        getFragmentManager().beginTransaction().
+                replace(R.id.container, AddDictionaryFragment.newInstance())
                 .commit();
     }
 
@@ -130,13 +169,6 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotDeleteWord));
         }
 
-    }
-
-    @Override
-    public void showAddDictionary() {
-        getFragmentManager().beginTransaction().
-                replace(R.id.container, AddDictionaryFragment.newInstance())
-                .commit();
     }
 
     @Override
@@ -184,25 +216,33 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     }
 
     @Override
-    public List<Dictionary> getListOfDictionaries(int baseLanguage, int refLanguage) {
+    public List<Dictionary> getDictionaries(int baseLanguage, int refLanguage) {
         try {
             return fiszkiDao.getDictionaryDao().enumerate(baseLanguage, refLanguage);
         } catch (SQLException e) {
-            Log.e(RepositoryActivity.class.getName(), "getListOfDictionaries", e);
+            Log.e(RepositoryActivity.class.getName(), "getDictionaries", e);
             AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveDictionaries));
         }
         return null;
     }
 
     @Override
-    public List<Word> showWords(int dictionary) {
+    public List<Word> getWords(int dictionary) {
         try {
             return fiszkiDao.getWordDao().enumerate(dictionary);
         } catch (SQLException e) {
-            Log.e(RepositoryActivity.class.getName(), "showWords", e);
+            Log.e(RepositoryActivity.class.getName(), "getWords", e);
             AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveWords));
         }
         return null;
+    }
+
+    private enum RepositoryFragment {
+        DictionariesList,
+        WordsList,
+        AddDictionary,
+        AddWord,
+        DownloadDictionaries
     }
 
 }

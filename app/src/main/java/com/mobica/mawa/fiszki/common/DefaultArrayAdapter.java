@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mobica.mawa.fiszki.R;
-import com.mobica.mawa.fiszki.reporsitory.Repository;
 
 import java.util.List;
 
@@ -19,15 +18,15 @@ import java.util.List;
  */
 public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
-    private final Repository repository;
+    private final Context context;
     private List<Integer> ids;
     private List<String> values;
     private AdapterClickListener adapterClickListener;
 
-    public DefaultArrayAdapter(Repository repository, List<Integer> ids, List<String> values,
+    public DefaultArrayAdapter(Context context, List<Integer> ids, List<String> values,
                                AdapterClickListener adapterClickListener) {
-        super(repository.getContext(), R.layout.rowlayout, values);
-        this.repository = repository;
+        super(context, R.layout.rowlayout, values);
+        this.context = context;
         this.ids = ids;
         this.values = values;
         this.adapterClickListener = adapterClickListener;
@@ -35,7 +34,7 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) repository.getContext()
+        LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
 
@@ -54,9 +53,9 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             //noinspection deprecation
-            rowView.setBackgroundDrawable(repository.getContext().getResources().getDrawable(((position % 2) == 1) ? R.color.lightblue : R.color.darklightblue));
+            rowView.setBackgroundDrawable(context.getResources().getDrawable(((position % 2) == 1) ? R.color.white : R.color.lightgray));
         } else {
-            rowView.setBackground(repository.getContext().getResources().getDrawable(((position % 2) == 1) ? R.color.lightblue : R.color.darklightblue));
+            rowView.setBackground(context.getResources().getDrawable(((position % 2) == 1) ? R.color.white : R.color.lightgray));
         }
     }
 

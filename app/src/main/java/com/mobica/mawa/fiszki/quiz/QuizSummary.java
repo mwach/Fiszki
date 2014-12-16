@@ -21,10 +21,11 @@ import roboguice.inject.InjectView;
  */
 public class QuizSummary extends RoboFragment {
 
-    public static final String DICTIONARY_ID = "DICTIONARY_ID";
+    static final String DICTIONARY_ID = "DICTIONARY_ID";
     static final String NO_OF_QUESTIONS = "NO_OF_QUESTIONS";
     static final String CORRECT_ANSWERS = "CORRECT_ANSWERS";
     static final String RATIO = "RATIO";
+
     @InjectView(R.id.textViewCorrectAnswers)
     TextView textViewCorrectAnswers;
     @InjectView(R.id.textViewNoOfQuestions)

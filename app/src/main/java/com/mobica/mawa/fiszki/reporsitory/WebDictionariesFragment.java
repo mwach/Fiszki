@@ -45,8 +45,10 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     RestAdapter restAdapter;
     @Inject
     FiszkiDao fiszkiDao;
+
     private Dictionaries dictionaries;
     private Context context;
+
     @InjectView(R.id.webDictionariesList)
     private ListView dictionariesListView;
 
@@ -75,7 +77,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dictionaries = (Dictionaries) getArguments().getParcelable(DICT_KEY);
+        dictionaries = getArguments().getParcelable(DICT_KEY);
 
         DownloadArrayAdapter adapter = new DownloadArrayAdapter(getActivity(), dictionaries.dictionaries, this);
         dictionariesListView.setAdapter(adapter);

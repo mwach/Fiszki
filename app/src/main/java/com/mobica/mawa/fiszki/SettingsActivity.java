@@ -99,7 +99,7 @@ public class SettingsActivity extends RoboActivity {
         try {
             definedLanguages.addAll(fiszkiDao.getLanguageDao().enumerate());
         } catch (SQLException e) {
-            Log.e(SettingsActivity.class.getName(), "getListOfDictionaries", e);
+            Log.e(SettingsActivity.class.getName(), "getDictionaries", e);
             AlertHelper.showError(SettingsActivity.this, getString(R.string.couldNotRetrieveDictionaries));
         }
         List<String> languages = new ArrayList<String>();

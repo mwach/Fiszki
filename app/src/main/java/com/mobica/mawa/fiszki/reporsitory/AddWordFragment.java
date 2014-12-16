@@ -114,7 +114,7 @@ public class AddWordFragment extends RoboFragment {
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getRepository().loadDictionary(dictionaryId);
+                getRepository().showWords(dictionaryId);
             }
         });
 

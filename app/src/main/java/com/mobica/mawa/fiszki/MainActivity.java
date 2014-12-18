@@ -1,21 +1,36 @@
 package com.mobica.mawa.fiszki;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
+import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 import com.mobica.mawa.fiszki.quiz.QuizActivity;
 import com.mobica.mawa.fiszki.reporsitory.RepositoryActivity;
 
-public class MainActivity extends Activity {
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+
+public class MainActivity extends RoboActivity {
+
+    private boolean languagesDownloaded = false;
+
+    @InjectView(R.id.quizImageButton)
+    private ImageButton quizImageButton;
+
+    @InjectView(R.id.dictImageButton)
+    private ImageButton dictImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        this.languagesDownloaded = !PreferencesHelper.getBaseLanguage(this).equals("");
+        quizImageButton.setEnabled(languagesDownloaded);
+        dictImageButton.setEnabled(languagesDownloaded);
     }
 
     @Override

@@ -54,6 +54,8 @@
         <EditText
             android:id="@+id/editTextServerUrl"
             android:layout_width="0px"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:hint="@string/serverURL"
+            android:inputType="text|textUri" />
     </TableRow>
 </TableLayout>

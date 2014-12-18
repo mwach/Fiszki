@@ -2,21 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/activity_margin_6">
 
     <TextView
         android:id="@+id/rowlayoutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/rowlayoutInfoButton"
+        android:layout_toStartOf="@+id/rowlayoutInfoButton"
         android:textSize="@dimen/activity_word_small_size_xx" />
 
     <ImageButton
         android:id="@+id/rowlayoutDownloadButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@null"
         android:contentDescription="@string/download"
@@ -27,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/rowlayoutDownloadButton"
+        android:layout_toStartOf="@+id/rowlayoutDownloadButton"
         android:background="@null"
         android:contentDescription="@string/info"
         android:src="@drawable/info" />

@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context=".MainScreen">
 
     <TableRow
@@ -35,7 +35,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="onClick"
                 android:text="@string/new_quiz"
                 android:textSize="@dimen/activity_word_small_size_xx" />
         </LinearLayout>
@@ -62,7 +61,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="onClick"
                 android:text="@string/add_words"
                 android:textSize="@dimen/activity_word_small_size_xx" />
         </LinearLayout>
@@ -91,7 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="onClick"
                 android:text="@string/statistics"
                 android:textSize="@dimen/activity_word_small_size_xx" />
 
@@ -120,7 +117,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="onClick"
                 android:text="@string/exit"
                 android:textSize="@dimen/activity_word_small_size_xx" />
 

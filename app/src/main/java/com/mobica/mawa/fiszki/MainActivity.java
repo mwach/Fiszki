@@ -16,8 +16,6 @@ import roboguice.inject.InjectView;
 
 public class MainActivity extends RoboActivity {
 
-    private boolean languagesDownloaded = false;
-
     @InjectView(R.id.quizImageButton)
     private ImageButton quizImageButton;
 
@@ -28,9 +26,15 @@ public class MainActivity extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-        this.languagesDownloaded = !PreferencesHelper.getBaseLanguage(this).equals("");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean languagesDownloaded = !PreferencesHelper.getBaseLanguage(this).equals("");
         quizImageButton.setEnabled(languagesDownloaded);
         dictImageButton.setEnabled(languagesDownloaded);
+
     }
 
     @Override

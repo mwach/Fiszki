@@ -48,8 +48,8 @@
     <string name="restartQuiz">Re-run quiz</string>
     <string name="couldNotCreateDir">Could not create dictionary</string>
     <string name="couldNotCreateWord">Could not create word</string>
-    <string name="couldNotRetrieveBaseLanguage">Could not retrieve base language</string>
-    <string name="couldNotRetrieveRefLanguage">Could not retrieve ref language</string>
+    <string name="couldNotRetrieveBaseLanguage">Could not retrieve base language. Check settings</string>
+    <string name="couldNotRetrieveRefLanguage">Could not retrieve ref language. Check settings</string>
     <string name="couldNotDeleteDictionary">Could not delete dictionary</string>
     <string name="couldNotDeleteWord">Could not delete word</string>
     <string name="couldNotRetrieveDictionaries">Could not retrieve list of dictionaries</string>
@@ -68,4 +68,5 @@
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="serverURL">Server URL</string>
+    <string name="dictionaryDownloadedButFailedToAdd">Dictionary downloadad but not added to the database. Possible duplicate</string>
 </resources>

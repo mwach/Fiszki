@@ -79,6 +79,10 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        showDictionaries();
+    }
+
+    public void showDictionaries(){
         int baseLanguage = getRepository().getBaseLanguage();
         int refLanguage = getRepository().getRefLanguage();
 
@@ -119,5 +123,12 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
     @Override
     public void buttonClicked(int position) {
         repository.deleteDictionary(position);
+    }
+
+    public void highlightDictionary(int dictionaryId) {
+        DefaultArrayAdapter daa = (DefaultArrayAdapter)dictionariesListView.getAdapter();
+        for(int i=0; i <daa.getCount() ; i++){
+            String item = daa.getItem(i);
+        }
     }
 }

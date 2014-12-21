@@ -1,5 +1,5 @@
 #
-# generated on 2014/12/15 07:07:37
+# generated on 2014/12/21 06:06:15
 #
 # --table-start--
 dataClass=com.mobica.mawa.fiszki.dao.bean.Language
@@ -18,6 +18,7 @@ canBeNull=false
 # --field-start--
 fieldName=description
 columnName=desc
+canBeNull=false
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -35,14 +36,18 @@ generatedId=true
 fieldName=name
 columnName=name
 canBeNull=false
+unique=true
 # --field-end--
 # --field-start--
 fieldName=description
 columnName=desc
+canBeNull=false
 # --field-end--
 # --field-start--
 fieldName=uuid
 columnName=uuid
+canBeNull=false
+unique=true
 # --field-end--
 # --field-start--
 fieldName=baseLanguage

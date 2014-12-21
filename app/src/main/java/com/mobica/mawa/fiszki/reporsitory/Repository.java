@@ -16,6 +16,8 @@ public interface Repository {
 
     public void showDictionaries();
 
+    public void refreshDictionaries();
+
     public void showAddWord(int dictionary);
 
     public void showAddDictionary();

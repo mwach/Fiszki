@@ -30,7 +30,7 @@ class DictionaryDao extends AbstractDao<Dictionary> implements IDictionaryDao {
         // the password field must be equal to "_secret"
         where.eq(Dictionary.REF_LANG, refLanguage);
 
-        qb.orderBy(Dictionary.DESC, false);
+        qb.orderBy(Dictionary.NAME, true);
         PreparedQuery<Dictionary> preparedQuery = qb.prepare();
         return getDao().query(preparedQuery);
     }

@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "Fiszki.db";
 
     private Class<T> type;
@@ -68,8 +68,10 @@ public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        if (!db.isReadOnly()) {
-            db.setForeignKeyConstraintsEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (!db.isReadOnly()) {
+                db.setForeignKeyConstraintsEnabled(true);
+            }
         }
     }
 

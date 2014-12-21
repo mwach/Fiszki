@@ -90,8 +90,14 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dictionary = getArguments().getInt(DICTIONARY_ID);
-        List<Word> words = getRepository().getWords(dictionary);
+        if(getArguments() != null && getArguments().containsKey(DICTIONARY_ID)){
+            dictionary = getArguments().getInt(DICTIONARY_ID);
+            loadDictionary(dictionary);
+        }
+    }
+
+    public void loadDictionary(int dictionaryId) {
+        List<Word> words = getRepository().getWords(dictionaryId);
 
         List<Integer> ids = new ArrayList<Integer>();
         List<String> values = new ArrayList<String>();
@@ -102,6 +108,7 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
         }
 
         wordsList.setAdapter(new DefaultArrayAdapter(context, ids, values, this));
+
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Language {
     private int id;
     @DatabaseField(canBeNull = false, columnName = NAME)
     private String name;
-    @DatabaseField(columnName = DESC)
+    @DatabaseField(canBeNull = false, columnName = DESC)
     private String description;
 
     public Language() {

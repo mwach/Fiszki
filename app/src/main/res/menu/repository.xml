@@ -5,13 +5,13 @@
         android:id="@+id/action_download"
         android:icon="@drawable/download"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always|withText"
         android:title="@string/download" />
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/add"
         android:orderInCategory="99"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always|withText"
         android:title="@string/add_dictionary" />
 
 </menu>

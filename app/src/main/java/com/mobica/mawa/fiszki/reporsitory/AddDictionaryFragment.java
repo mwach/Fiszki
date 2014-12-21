@@ -3,6 +3,8 @@ package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -87,6 +89,7 @@ public class AddDictionaryFragment extends RoboFragment {
                 if (dictionaryEditText.getText().toString().length() > 0 &&
                         descriptionEditText.getText().toString().length() > 0) {
                     addDirectoryConfirmButton.setEnabled(true);
+
                 } else {
                     addDirectoryConfirmButton.setEnabled(false);
                 }

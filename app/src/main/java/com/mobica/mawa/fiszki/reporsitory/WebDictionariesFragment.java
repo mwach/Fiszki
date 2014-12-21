@@ -48,6 +48,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
 
     private Dictionaries dictionaries;
     private Context context;
+    private Repository repository;
 
     @InjectView(R.id.webDictionariesList)
     private ListView dictionariesListView;
@@ -88,6 +89,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.context = activity;
+        this.repository = (Repository)activity;
     }
 
     @Override
@@ -98,8 +100,13 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
             @Override
             public void success(Words words, Response response) {
                 if (words != null && words.words != null) {
-                    addDictionary(dictionary, words.words);
-                    AlertHelper.showInfo(context, context.getString(R.string.info), context.getString(R.string.dictionaryDownloaded));
+                    try {
+                        addDictionary(dictionary, words.words);
+                        AlertHelper.showInfo(context, context.getString(R.string.info), context.getString(R.string.dictionaryDownloaded));
+                        repository.refreshDictionaries();
+                    } catch (SQLException e) {
+                        AlertHelper.showError(context, context.getString(R.string.dictionaryDownloadedButFailedToAdd));
+                    }
                 } else {
                     AlertHelper.showError(context, context.getString(R.string.noDataAvailableOnServer));
                 }
@@ -112,17 +119,13 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
         });
     }
 
-    private void addDictionary(Dictionary dictionary, List<com.mobica.mawa.fiszki.rest.dto.Word> words) {
-        try {
-            Language baseLanguage = fiszkiDao.getLanguageDao().getBaseLanguage();
-            Language refLanguage = fiszkiDao.getLanguageDao().getRefLanguage();
-            com.mobica.mawa.fiszki.dao.bean.Dictionary dbDictionary = ObjectHelper.fromDictionaryDto(dictionary, baseLanguage, refLanguage);
-            dbDictionary = fiszkiDao.getDictionaryDao().create(dbDictionary);
-            List<Word> dbWords = ObjectHelper.fromWordDto(words, dbDictionary);
-            fiszkiDao.getWordDao().create(dbWords);
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-        }
+    private void addDictionary(Dictionary dictionary, List<com.mobica.mawa.fiszki.rest.dto.Word> words) throws SQLException{
+        Language baseLanguage = fiszkiDao.getLanguageDao().getBaseLanguage();
+        Language refLanguage = fiszkiDao.getLanguageDao().getRefLanguage();
+        com.mobica.mawa.fiszki.dao.bean.Dictionary dbDictionary = ObjectHelper.fromDictionaryDto(dictionary, baseLanguage, refLanguage);
+        dbDictionary = fiszkiDao.getDictionaryDao().create(dbDictionary);
+        List<Word> dbWords = ObjectHelper.fromWordDto(words, dbDictionary);
+        fiszkiDao.getWordDao().create(dbWords);
     }
 
     @Override

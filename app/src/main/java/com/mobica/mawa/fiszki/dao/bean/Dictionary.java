@@ -18,11 +18,11 @@ public class Dictionary {
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
-    @DatabaseField(canBeNull = false, columnName = NAME)
+    @DatabaseField(canBeNull = false, columnName = NAME, unique = true)
     private String name;
-    @DatabaseField(columnName = DESC)
+    @DatabaseField(columnName = DESC, canBeNull = false)
     private String description;
-    @DatabaseField(columnName = UUID)
+    @DatabaseField(columnName = UUID, canBeNull = false, unique = true)
     private String uuid;
     @DatabaseField(canBeNull = false, foreign = true, columnName = BASE_LANG, columnDefinition = "integer references language(id) on delete cascade")
     private Language baseLanguage;

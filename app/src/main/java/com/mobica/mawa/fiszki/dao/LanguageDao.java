@@ -22,12 +22,20 @@ class LanguageDao extends AbstractDao<Language> implements ILanguageDao {
 
     public Language getBaseLanguage() throws SQLException {
         String baseLanguageName = PreferencesHelper.getBaseLanguage(context);
-        return getDao().queryForEq(Language.NAME, baseLanguageName).get(0);
+        List<Language> languages = getDao().queryForEq(Language.NAME, baseLanguageName);
+        if(languages.isEmpty()){
+            throw new SQLException("BaseLanguage not found in the database");
+        }
+        return languages.get(0);
     }
 
     public Language getRefLanguage() throws SQLException {
         String refLanguageName = PreferencesHelper.getRefLanguage(context);
-        return getDao().queryForEq(Language.NAME, refLanguageName).get(0);
+        List<Language> languages = getDao().queryForEq(Language.NAME, refLanguageName);
+        if(languages.isEmpty()){
+            throw new SQLException("RefLanguage not found in the database");
+        }
+        return languages.get(0);
     }
 
     public void createOrUpdate(List<Language> languages) throws SQLException {

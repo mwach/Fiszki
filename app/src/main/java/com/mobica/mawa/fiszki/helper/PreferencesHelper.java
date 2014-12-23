@@ -35,10 +35,10 @@ public final class PreferencesHelper {
     }
 
 
-    public static int getNumberOfQuestions(Context activity) {
-        SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.app_name), Context.MODE_PRIVATE);
+    public static int getNumberOfQuestions(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
         int defNoOfQuestions = Integer.parseInt(
-                activity.getString(R.string.defaultNoOfQuestions));
+                context.getString(R.string.defaultNoOfQuestions));
         return sharedPref.getInt(QUIZ_NO_OF_QUESTIONS, defNoOfQuestions);
     }
 
@@ -47,8 +47,8 @@ public final class PreferencesHelper {
         sharedPref.edit().putString(propertyName, propertyValue).commit();
     }
 
-    public static void setProperty(Context activity, String propertyName, int propertyValue) {
-        SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.app_name), Context.MODE_PRIVATE);
+    public static void setProperty(Context context, String propertyName, int propertyValue) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
         sharedPref.edit().putInt(propertyName, propertyValue).commit();
     }
 }

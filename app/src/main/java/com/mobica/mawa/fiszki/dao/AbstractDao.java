@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "Fiszki.db";
 
     private Class<T> type;

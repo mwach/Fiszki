@@ -24,6 +24,7 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:contentDescription="@string/download"
+        android:layout_marginLeft="@dimen/activity_margin_6"
         android:src="@drawable/download" />
 
     <ImageButton

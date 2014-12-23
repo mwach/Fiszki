@@ -2,14 +2,21 @@ package com.mobica.mawa.fiszki;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.mobica.mawa.fiszki.common.AlertHelper;
+import com.mobica.mawa.fiszki.dao.FiszkiDao;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
 import com.mobica.mawa.fiszki.quiz.QuizActivity;
 import com.mobica.mawa.fiszki.reporsitory.RepositoryActivity;
+
+import java.sql.SQLException;
+
+import javax.inject.Inject;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -22,16 +29,24 @@ public class MainActivity extends RoboActivity {
     @InjectView(R.id.dictImageButton)
     private ImageButton dictImageButton;
 
+    @Inject
+    FiszkiDao fiszkiDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        if(!isLanguageDefined()){
+            AlertHelper.showInfo(MainActivity.this, getString(R.string.dbNotPopulated), getString(R.string.dbNotPopulatedMessage));
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        boolean languagesDownloaded = !PreferencesHelper.getBaseLanguage(this).equals("");
+        boolean languagesDownloaded = isLanguageDefined();
         quizImageButton.setEnabled(languagesDownloaded);
         dictImageButton.setEnabled(languagesDownloaded);
 
@@ -86,5 +101,15 @@ public class MainActivity extends RoboActivity {
             default:
                 break;
         }
+    }
+
+    private boolean isLanguageDefined(){
+        try {
+            return !PreferencesHelper.getBaseLanguage(this).equals("") && !fiszkiDao.getLanguageDao().enumerate().isEmpty();
+        } catch (SQLException e) {
+            AlertHelper.showError(MainActivity.this, getString(R.string.couldNotRetrieveBaseLanguage));
+            Log.e(MainActivity.class.getName(), "isLanguageDefined", e);
+        }
+        return false;
     }
 }

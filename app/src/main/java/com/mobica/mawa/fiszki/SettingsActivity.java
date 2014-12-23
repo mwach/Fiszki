@@ -155,11 +155,6 @@ public class SettingsActivity extends RoboActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.action_home:
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(homeIntent);
-                return true;
             case R.id.action_refresh:
                 refresh();
                 return true;

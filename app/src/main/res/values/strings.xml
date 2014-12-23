@@ -69,4 +69,7 @@
     <string name="cancel">Cancel</string>
     <string name="serverURL">Server URL</string>
     <string name="dictionaryDownloadedButFailedToAdd">Dictionary downloadad but not added to the database. Possible duplicate</string>
+    <string name="send_email">Send Email</string>
+    <string name="dbNotPopulated">No init data</string>
+    <string name="dbNotPopulatedMessage">No data available in the database. Please go to \'Settings\' and verify it</string>
 </resources>

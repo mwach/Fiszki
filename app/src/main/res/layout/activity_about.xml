@@ -29,9 +29,11 @@
         android:textStyle="bold"
         android:textSize="@dimen/activity_word_mid_size"/>
     <TextView
+        android:id="@+id/about_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/marcinmail"
+        android:textColor="@color/darkblue2"
         android:textSize="@dimen/activity_word_small_size"/>
 
 </LinearLayout>

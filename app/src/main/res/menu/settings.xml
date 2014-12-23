@@ -1,18 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mobica.mawa.fiszki.AboutActivity">
-    <!--
-        <item
-            android:id="@+id/action_home"
-            android:icon="@drawable/home"
-            android:orderInCategory="100"
-            android:showAsAction="ifRoom"
-            android:title="@string/home" />
-    -->
+
     <item
         android:id="@+id/action_refresh"
-        android:icon="@drawable/refresh"
+        android:icon="@drawable/download"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/refresh" />
 </menu>

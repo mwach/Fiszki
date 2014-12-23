@@ -20,6 +20,6 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:contentDescription="@string/remove"
-        android:src="@drawable/remove2" />
+        android:src="@drawable/remove" />
 
 </RelativeLayout>

@@ -49,7 +49,8 @@ public class MainActivity extends RoboActivity {
         boolean languagesDownloaded = isLanguageDefined();
         quizImageButton.setEnabled(languagesDownloaded);
         dictImageButton.setEnabled(languagesDownloaded);
-
+        quizImageButton.setImageResource(languagesDownloaded ? R.drawable.quiz : R.drawable.quiz_bw);
+        dictImageButton.setImageResource(languagesDownloaded ? R.drawable.dict : R.drawable.dict_bw);
     }
 
     @Override

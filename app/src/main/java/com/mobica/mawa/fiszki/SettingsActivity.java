@@ -90,6 +90,10 @@ public class SettingsActivity extends RoboActivity {
         String serverURL = PreferencesHelper.getServerURL(this);
         editTextServerUrl.setText(serverURL);
         editTextServerUrl.addTextChangedListener(new EditTextListener(this, PreferencesHelper.SERVER_URL));
+
+        if(languages.isEmpty()){
+            AlertHelper.showInfo(SettingsActivity.this, getString(R.string.dbNotPopulated), getString(R.string.download_languages));
+        }
     }
 
     private void populateSpinner(Spinner spinner, List<String> items) {

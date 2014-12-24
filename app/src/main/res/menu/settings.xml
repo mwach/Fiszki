@@ -7,5 +7,5 @@
         android:icon="@drawable/download"
         android:orderInCategory="100"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/refresh" />
+        android:title="@string/download" />
 </menu>

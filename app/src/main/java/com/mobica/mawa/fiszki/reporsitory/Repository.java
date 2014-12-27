@@ -10,7 +10,7 @@ import java.util.List;
  * Used by the repository part of the application
  * Created by mawa on 2014-10-26.
  */
-public interface Repository {
+interface Repository {
 
     public void showWords(int dictionaryId);
 

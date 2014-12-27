@@ -39,9 +39,9 @@ import roboguice.inject.InjectView;
 public class SettingsActivity extends RoboActivity {
 
     @Inject
-    FiszkiDao fiszkiDao;
+    private FiszkiDao fiszkiDao;
     @Inject
-    RestAdapter restAdapter;
+    private RestAdapter restAdapter;
     @InjectView(R.id.spinnerBaseLanguage)
     private Spinner baseLanguageSpinner;
     @InjectView(R.id.spinnerRefLanguage)
@@ -97,7 +97,7 @@ public class SettingsActivity extends RoboActivity {
 
     private void populateSpinner(Spinner spinner, List<String> items) {
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this,
+                new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, items);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -107,14 +107,14 @@ public class SettingsActivity extends RoboActivity {
 
     private List<String> getListOfLanguages() {
 
-        List<Language> definedLanguages = new ArrayList<Language>();
+        List<Language> definedLanguages = new ArrayList<>();
         try {
             definedLanguages.addAll(fiszkiDao.getLanguageDao().enumerate());
         } catch (SQLException e) {
             Log.e(SettingsActivity.class.getName(), "getDictionaries", e);
             AlertHelper.showError(SettingsActivity.this, getString(R.string.couldNotRetrieveLanguages));
         }
-        List<String> languages = new ArrayList<String>();
+        List<String> languages = new ArrayList<>();
         for (Language lang : definedLanguages) {
             languages.add(lang.getName());
         }
@@ -168,8 +168,8 @@ public class SettingsActivity extends RoboActivity {
 
     private static class SpinnerListener implements AdapterView.OnItemSelectedListener {
 
-        private Context context;
-        private String propertyName;
+        private final Context context;
+        private final String propertyName;
 
         public SpinnerListener(Context context, String propertyName) {
             this.context = context;
@@ -193,8 +193,8 @@ public class SettingsActivity extends RoboActivity {
 
     private static class EditTextListener implements TextWatcher {
 
-        private Context context;
-        private String propertyName;
+        private final Context context;
+        private final String propertyName;
 
         public EditTextListener(Context context, String propertyName) {
             this.context = context;

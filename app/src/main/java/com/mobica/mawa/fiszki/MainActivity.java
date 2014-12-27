@@ -29,15 +29,18 @@ public class MainActivity extends RoboActivity {
     @InjectView(R.id.dictImageButton)
     private ImageButton dictImageButton;
 
+    @InjectView(R.id.statsImageButton)
+    private ImageButton statsImageButton;
+
     @Inject
-    FiszkiDao fiszkiDao;
+    private FiszkiDao fiszkiDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        if(!isLanguageDefined()){
+        if (!isLanguageDefined()) {
             AlertHelper.showInfo(MainActivity.this, getString(R.string.dbNotPopulated), getString(R.string.dbNotPopulatedMessage));
         }
 
@@ -51,6 +54,8 @@ public class MainActivity extends RoboActivity {
         dictImageButton.setEnabled(languagesDownloaded);
         quizImageButton.setImageResource(languagesDownloaded ? R.drawable.quiz : R.drawable.quiz_bw);
         dictImageButton.setImageResource(languagesDownloaded ? R.drawable.dict : R.drawable.dict_bw);
+        dictImageButton.setImageResource(languagesDownloaded ? R.drawable.dict : R.drawable.dict_bw);
+        statsImageButton.setImageResource(languagesDownloaded ? R.drawable.stats : R.drawable.stats_bw);
     }
 
     @Override
@@ -104,7 +109,7 @@ public class MainActivity extends RoboActivity {
         }
     }
 
-    private boolean isLanguageDefined(){
+    private boolean isLanguageDefined() {
         try {
             return !PreferencesHelper.getBaseLanguage(this).equals("") && !fiszkiDao.getLanguageDao().enumerate().isEmpty();
         } catch (SQLException e) {

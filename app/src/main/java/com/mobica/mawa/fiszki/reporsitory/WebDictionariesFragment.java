@@ -42,9 +42,9 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
 
     private static final String DICT_KEY = "DICT_KEY";
     @Inject
-    RestAdapter restAdapter;
+    private RestAdapter restAdapter;
     @Inject
-    FiszkiDao fiszkiDao;
+    private FiszkiDao fiszkiDao;
 
     private Context context;
     private Repository repository;

@@ -15,13 +15,13 @@ import roboguice.inject.InjectView;
 public class QuizQuestionFragment extends RoboFragment implements QuestionFragmentInterface {
 
     @InjectView(R.id.quizQuestionStatusTextView)
-    TextView quizQuestionStatusTextView;
+    private TextView quizQuestionStatusTextView;
     @InjectView(R.id.quizResponseTextView)
-    TextView quizResponseTextView;
+    private TextView quizResponseTextView;
     @InjectView(R.id.quizResponseButton)
-    Button quizResponseButton;
+    private Button quizResponseButton;
     @InjectView(R.id.quizWordTextView)
-    TextView quizWordTextView;
+    private TextView quizWordTextView;
 
     private int numberOfQuestions = 0;
 

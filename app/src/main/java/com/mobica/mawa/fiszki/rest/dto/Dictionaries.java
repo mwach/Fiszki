@@ -28,7 +28,7 @@ public class Dictionaries implements Parcelable {
 
     // example constructor that takes a Parcel and gives you an object populated with it's values
     private Dictionaries(Parcel in) {
-        dictionaries = new ArrayList<Dictionary>();
+        dictionaries = new ArrayList<>();
         Dictionary dictionary = new Dictionary();
         dictionary.setRefLanguageId(in.readLong());
         dictionary.setBaseLanguageId(in.readLong());

@@ -28,13 +28,13 @@ public class QuizSummary extends RoboFragment {
     static final String RATIO = "RATIO";
 
     @InjectView(R.id.textViewCorrectAnswers)
-    TextView textViewCorrectAnswers;
+    private TextView textViewCorrectAnswers;
     @InjectView(R.id.textViewNoOfQuestions)
-    TextView textViewNoOfQuestions;
+    private TextView textViewNoOfQuestions;
     @InjectView(R.id.textViewRatio)
-    TextView textViewRatio;
+    private TextView textViewRatio;
     @InjectView(R.id.reRunQuizButton)
-    Button reRunQuizButton;
+    private Button reRunQuizButton;
 
     private QuizInterface quiz = null;
     private int totalQuestions;

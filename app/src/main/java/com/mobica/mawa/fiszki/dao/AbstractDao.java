@@ -27,10 +27,10 @@ public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
     private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "Fiszki.db";
 
-    private Class<T> type;
+    private final Class<T> type;
     private Dao<T, Integer> dao = null;
 
-    public AbstractDao(Context context, Class<T> type) {
+    AbstractDao(Context context, Class<T> type) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
         this.type = type;
     }
@@ -75,7 +75,7 @@ public class AbstractDao<T> extends OrmLiteSqliteOpenHelper implements Crud<T> {
         }
     }
 
-    protected Dao<T, Integer> getDao() throws SQLException {
+    Dao<T, Integer> getDao() throws SQLException {
         if (dao == null) {
             dao = getDao(type);
         }

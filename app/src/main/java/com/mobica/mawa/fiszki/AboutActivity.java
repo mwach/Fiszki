@@ -13,7 +13,7 @@ import roboguice.inject.InjectView;
 public class AboutActivity extends RoboActivity {
 
     @InjectView(R.id.about_email)
-    TextView emailTextView;
+    private TextView emailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

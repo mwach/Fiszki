@@ -12,7 +12,7 @@ import javax.inject.Inject;
 public class RestAdapter {
 
     @Inject
-    Context context;
+    private Context context;
     private retrofit.RestAdapter restAdapter;
 
     public synchronized <T> T create(Class<T> service) {

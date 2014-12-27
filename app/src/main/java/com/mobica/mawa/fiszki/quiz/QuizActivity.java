@@ -24,15 +24,15 @@ import roboguice.activity.RoboActivity;
 
 public class QuizActivity extends RoboActivity implements QuizInterface {
 
-    int currentQuestion = 0;
-    int correctAnswers = 0;
-    int dictionaryId = 0;
-    int strategy = Strategy.RANDOM;
-    QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
-    List<Word> dbWords = null;
+    private final QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
+    private int currentQuestion = 0;
+    private int correctAnswers = 0;
+    private int dictionaryId = 0;
+    private int strategy = Strategy.RANDOM;
+    private List<Word> dbWords = null;
 
     @Inject
-    FiszkiDao fiszkiDao;
+    private FiszkiDao fiszkiDao;
 
     @Override
     protected void onDestroy() {
@@ -94,7 +94,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         if (dbWords.size() == limit) {
             return dbWords;
         }
-        List<Word> response = new ArrayList<Word>();
+        List<Word> response = new ArrayList<>();
         //, noOfQuestions
         Random random = new Random();
         while (response.size() < limit) {
@@ -151,7 +151,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
                 .commit();
     }
 
-    public int getBaseLanguage() {
+    int getBaseLanguage() {
         try {
             return fiszkiDao.getLanguageDao().getBaseLanguage().getId();
         } catch (SQLException e) {
@@ -161,7 +161,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         return 0;
     }
 
-    public int getRefLanguage() {
+    int getRefLanguage() {
         try {
             return fiszkiDao.getLanguageDao().getRefLanguage().getId();
         } catch (SQLException e) {
@@ -175,7 +175,7 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
     public List<Dictionary> getListOfDictionaries() {
         int baseLanguage = getBaseLanguage();
         int refLanguage = getRefLanguage();
-        List<Dictionary> dictionaries = new ArrayList<Dictionary>();
+        List<Dictionary> dictionaries = new ArrayList<>();
         try {
             dictionaries.addAll(fiszkiDao.getDictionaryDao().enumerate(baseLanguage, refLanguage));
         } catch (SQLException e) {

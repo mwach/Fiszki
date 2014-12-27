@@ -6,15 +6,15 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "word")
 public class Word {
 
-    public static final String ID = "id";
     public static final String DICT = "dict";
-    public static final String BASE_WORD = "base_word";
-    public static final String REF_WORD = "ref_word";
     public static final String ADDED = "added";
     public static final String KNOWN = "known";
     public static final String UNKNOWN = "unknown";
-    public static final String LAST_KNOWN = "last_known";
-    public static final String LAST_UNKNOWN = "last_unknown";
+    private static final String ID = "id";
+    private static final String BASE_WORD = "base_word";
+    private static final String REF_WORD = "ref_word";
+    private static final String LAST_KNOWN = "last_known";
+    private static final String LAST_UNKNOWN = "last_unknown";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
@@ -88,7 +88,7 @@ public class Word {
         return added;
     }
 
-    public void setAdded(long added) {
+    void setAdded(long added) {
         this.added = added;
     }
 
@@ -96,7 +96,7 @@ public class Word {
         return known;
     }
 
-    public void setKnown(int known) {
+    void setKnown(int known) {
         this.known = known;
     }
 
@@ -108,7 +108,7 @@ public class Word {
         return unknown;
     }
 
-    public void setUnknown(int unknown) {
+    void setUnknown(int unknown) {
         this.unknown = unknown;
     }
 

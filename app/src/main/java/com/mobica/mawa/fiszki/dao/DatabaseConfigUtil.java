@@ -10,7 +10,7 @@ import java.io.File;
 /**
  * Created by mawa on 2014-11-11.
  */
-public class DatabaseConfigUtil extends OrmLiteConfigUtil {
+class DatabaseConfigUtil extends OrmLiteConfigUtil {
 
     private static final String ORMLITE_CONFIGURATION_FILE_NAME = "ormlite_config.txt";
 

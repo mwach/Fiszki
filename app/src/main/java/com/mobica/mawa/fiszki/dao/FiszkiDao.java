@@ -12,7 +12,7 @@ import com.google.inject.Singleton;
 public class FiszkiDao {
 
     @Inject
-    Application application;
+    private Application application;
 
     private LanguageDao languageDao = null;
     private WordDao wordDao = null;

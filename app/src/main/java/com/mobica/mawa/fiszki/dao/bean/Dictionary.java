@@ -9,13 +9,13 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "dictionary")
 public class Dictionary {
 
-    public static final String ID = "id";
     public static final String NAME = "name";
-    public static final String DESC = "desc";
-    public static final String UUID = "uuid";
     public static final String BASE_LANG = "base_lang";
     public static final String REF_LANG = "ref_lang";
-    public static final String ADDED = "added";
+    private static final String ID = "id";
+    private static final String DESC = "desc";
+    private static final String UUID = "uuid";
+    private static final String ADDED = "added";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
@@ -98,7 +98,7 @@ public class Dictionary {
         return added;
     }
 
-    public void setAdded(long added) {
+    void setAdded(long added) {
         this.added = added;
     }
 

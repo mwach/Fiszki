@@ -19,9 +19,9 @@ import java.util.List;
 public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
     private final Context context;
-    private List<Integer> ids;
-    private List<String> values;
-    private AdapterClickListener adapterClickListener;
+    private final List<Integer> ids;
+    private final List<String> values;
+    private final AdapterClickListener adapterClickListener;
 
     public DefaultArrayAdapter(Context context, List<Integer> ids, List<String> values,
                                AdapterClickListener adapterClickListener) {
@@ -34,18 +34,23 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.dictionary_row_layout, parent, false);
 
-        setRowBackgroundColor(rowView, position);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.dictionary_row_layout, parent, false);
+            setRowBackgroundColor(convertView, position);
 
-        TextView tv = (TextView) rowView.findViewById(R.id.rowlayoutTextView);
-        tv.setText(values.get(position));
-        tv.setOnClickListener(new OpenClickListener(position));
-        ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutImageButton);
-        imageButton.setOnClickListener(new DeleteClickListener(position));
-        return rowView;
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.rowlayoutTextView);
+            viewHolder.textView.setText(values.get(position));
+            viewHolder.textView.setOnClickListener(new OpenClickListener(position));
+            viewHolder.imageButton = (ImageButton) convertView.findViewById(R.id.rowlayoutImageButton);
+            viewHolder.imageButton.setOnClickListener(new DeleteClickListener(position));
+            convertView.setTag(viewHolder);
+        }
+
+        return convertView;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -59,9 +64,14 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
         }
     }
 
+    static class ViewHolder {
+        TextView textView;
+        ImageButton imageButton;
+    }
+
     private class OpenClickListener implements View.OnClickListener {
 
-        private int position;
+        private final int position;
 
         public OpenClickListener(int position) {
             this.position = position;
@@ -76,7 +86,7 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
     private class DeleteClickListener implements View.OnClickListener {
 
-        private int position;
+        private final int position;
 
         public DeleteClickListener(int position) {
             this.position = position;

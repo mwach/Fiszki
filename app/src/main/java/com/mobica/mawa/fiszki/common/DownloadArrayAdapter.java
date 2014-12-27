@@ -19,9 +19,9 @@ import java.util.List;
  */
 public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
 
-    private Context context;
-    private List<Dictionary> dictionaries;
-    private DownloadAdapterClickListener adapterClickListener;
+    private final Context context;
+    private final List<Dictionary> dictionaries;
+    private final DownloadAdapterClickListener adapterClickListener;
 
     public DownloadArrayAdapter(Context context, List<Dictionary> dictionaries,
                                 DownloadAdapterClickListener adapterClickListener) {
@@ -33,19 +33,23 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.download_row_layout, parent, false);
 
-        setRowBackgroundColor(rowView, position);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.download_row_layout, parent, false);
+            setRowBackgroundColor(convertView, position);
 
-        TextView tv = (TextView) rowView.findViewById(R.id.rowlayoutTextView);
-        tv.setText(dictionaries.get(position).getName());
-        ImageButton downloadImageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutDownloadButton);
-        downloadImageButton.setOnClickListener(new DownloadClickListener(dictionaries.get(position)));
-        ImageButton infoImageButton = (ImageButton) rowView.findViewById(R.id.rowlayoutInfoButton);
-        infoImageButton.setOnClickListener(new InfoClickListener(dictionaries.get(position)));
-        return rowView;
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.rowlayoutTextView);
+            viewHolder.textView.setText(dictionaries.get(position).getName());
+            viewHolder.downloadImageButton = (ImageButton) convertView.findViewById(R.id.rowlayoutDownloadButton);
+            viewHolder.downloadImageButton.setOnClickListener(new DownloadClickListener(dictionaries.get(position)));
+            viewHolder.infoImageButton = (ImageButton) convertView.findViewById(R.id.rowlayoutInfoButton);
+            viewHolder.infoImageButton.setOnClickListener(new InfoClickListener(dictionaries.get(position)));
+        }
+
+        return convertView;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -59,9 +63,15 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
         }
     }
 
+    static class ViewHolder {
+        TextView textView;
+        ImageButton downloadImageButton;
+        ImageButton infoImageButton;
+    }
+
     private class DownloadClickListener implements View.OnClickListener {
 
-        private Dictionary dictionary;
+        private final Dictionary dictionary;
 
         public DownloadClickListener(Dictionary dictionary) {
             this.dictionary = dictionary;
@@ -75,7 +85,7 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
 
     private class InfoClickListener implements View.OnClickListener {
 
-        private Dictionary dictionary;
+        private final Dictionary dictionary;
 
         public InfoClickListener(Dictionary dictionary) {
             this.dictionary = dictionary;

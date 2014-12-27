@@ -10,7 +10,11 @@ import java.util.List;
 /**
  * Created by mawa on 09/12/14.
  */
-public class ObjectHelper {
+public final class ObjectHelper {
+
+    public ObjectHelper() {
+    }
+
     public static com.mobica.mawa.fiszki.dao.bean.Language fromLanguageDto(Language language) {
         com.mobica.mawa.fiszki.dao.bean.Language dbLanguage = new com.mobica.mawa.fiszki.dao.bean.Language();
         dbLanguage.setDescription(language.getDescription());
@@ -21,7 +25,7 @@ public class ObjectHelper {
     }
 
     public static List<com.mobica.mawa.fiszki.dao.bean.Language> fromLanguageDto(List<Language> languages) {
-        List<com.mobica.mawa.fiszki.dao.bean.Language> dbLanguages = new ArrayList<com.mobica.mawa.fiszki.dao.bean.Language>();
+        List<com.mobica.mawa.fiszki.dao.bean.Language> dbLanguages = new ArrayList<>();
         for (Language language : languages) {
             dbLanguages.add(fromLanguageDto(language));
         }
@@ -29,7 +33,7 @@ public class ObjectHelper {
     }
 
     public static List<com.mobica.mawa.fiszki.dao.bean.Word> fromWordDto(List<Word> words, com.mobica.mawa.fiszki.dao.bean.Dictionary dictionary) {
-        List<com.mobica.mawa.fiszki.dao.bean.Word> dbWords = new ArrayList<com.mobica.mawa.fiszki.dao.bean.Word>();
+        List<com.mobica.mawa.fiszki.dao.bean.Word> dbWords = new ArrayList<>();
         for (Word word : words) {
             dbWords.add(fromWordDto(word, dictionary));
         }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 class LanguageDao extends AbstractDao<Language> implements ILanguageDao {
 
-    private Context context;
+    private final Context context;
 
     public LanguageDao(Context context) {
         super(context, Language.class);
@@ -23,7 +23,7 @@ class LanguageDao extends AbstractDao<Language> implements ILanguageDao {
     public Language getBaseLanguage() throws SQLException {
         String baseLanguageName = PreferencesHelper.getBaseLanguage(context);
         List<Language> languages = getDao().queryForEq(Language.NAME, baseLanguageName);
-        if(languages.isEmpty()){
+        if (languages.isEmpty()) {
             throw new SQLException("BaseLanguage not found in the database");
         }
         return languages.get(0);
@@ -32,7 +32,7 @@ class LanguageDao extends AbstractDao<Language> implements ILanguageDao {
     public Language getRefLanguage() throws SQLException {
         String refLanguageName = PreferencesHelper.getRefLanguage(context);
         List<Language> languages = getDao().queryForEq(Language.NAME, refLanguageName);
-        if(languages.isEmpty()){
+        if (languages.isEmpty()) {
             throw new SQLException("RefLanguage not found in the database");
         }
         return languages.get(0);

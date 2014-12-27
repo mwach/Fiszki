@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by mawa on 2014-11-17.
  */
-public interface QuizInterface {
+interface QuizInterface {
 
     static final int UNDEFINED_DICTIONARY = -1;
 

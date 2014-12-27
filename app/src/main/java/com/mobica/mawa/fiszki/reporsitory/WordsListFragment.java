@@ -90,17 +90,17 @@ public class WordsListFragment extends RoboFragment implements AdapterClickListe
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(getArguments() != null && getArguments().containsKey(DICTIONARY_ID)){
+        if (getArguments() != null && getArguments().containsKey(DICTIONARY_ID)) {
             dictionary = getArguments().getInt(DICTIONARY_ID);
             loadDictionary(dictionary);
         }
     }
 
-    public void loadDictionary(int dictionaryId) {
+    void loadDictionary(int dictionaryId) {
         List<Word> words = getRepository().getWords(dictionaryId);
 
-        List<Integer> ids = new ArrayList<Integer>();
-        List<String> values = new ArrayList<String>();
+        List<Integer> ids = new ArrayList<>();
+        List<String> values = new ArrayList<>();
 
         for (Word word : words) {
             ids.add(word.getId());

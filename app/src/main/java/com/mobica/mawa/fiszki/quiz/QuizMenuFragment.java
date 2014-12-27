@@ -31,13 +31,13 @@ import roboguice.inject.InjectView;
 public class QuizMenuFragment extends RoboFragment {
 
     @InjectView(R.id.spinnerDictionaries)
-    Spinner spinnerDictionaries;
+    private Spinner spinnerDictionaries;
     @InjectView(R.id.spinnerStrategy)
-    Spinner spinnerStrategy;
+    private Spinner spinnerStrategy;
     @InjectView(R.id.editTextNoOfQuestions)
-    EditText editTextNoOfQuestions;
+    private EditText editTextNoOfQuestions;
     @InjectView(R.id.startQuizButton)
-    Button startQuizButton;
+    private Button startQuizButton;
 
     private QuizInterface quiz = null;
 
@@ -71,7 +71,7 @@ public class QuizMenuFragment extends RoboFragment {
         startQuizButton.setEnabled(!dictionaries.isEmpty());
         populateDictionariesSpinner(view.getContext(), spinnerDictionaries, dictionaries);
 
-        populateStrategySpinner(view.getContext(), spinnerStrategy, dictionaries);
+        populateStrategySpinner(view.getContext(), spinnerStrategy);
 
         editTextNoOfQuestions.setText(String.valueOf(PreferencesHelper.getNumberOfQuestions(getActivity())));
         spinnerStrategy.setSelection(PreferencesHelper.getStrategy(getActivity()) - 1);
@@ -80,7 +80,7 @@ public class QuizMenuFragment extends RoboFragment {
 
     private void populateDictionariesSpinner(Context rootItem, Spinner spinner, List<Dictionary> items) {
 
-        List<AdapterItem> adapterItems = new ArrayList<AdapterItem>();
+        List<AdapterItem> adapterItems = new ArrayList<>();
         if (!items.isEmpty()) {
             adapterItems.add(new AdapterItem(QuizInterface.UNDEFINED_DICTIONARY, getString(R.string.dictionaries_all)));
         }
@@ -95,14 +95,14 @@ public class QuizMenuFragment extends RoboFragment {
 
     private List<AdapterItem> getListOfItems(Iterable<Dictionary> items) {
 
-        List<AdapterItem> adapterItems = new ArrayList<AdapterItem>();
+        List<AdapterItem> adapterItems = new ArrayList<>();
         for (Dictionary dictionary : items) {
             adapterItems.add(new AdapterItem(dictionary.getId(), dictionary.getName()));
         }
         return adapterItems;
     }
 
-    private void populateStrategySpinner(Context rootItem, Spinner spinner, List<Dictionary> items) {
+    private void populateStrategySpinner(Context rootItem, Spinner spinner) {
 
         List<AdapterItem> adapterItems = getListOfStrategies();
         ArrayAdapter<AdapterItem> adapter = new GenericAdapter(rootItem,
@@ -114,7 +114,7 @@ public class QuizMenuFragment extends RoboFragment {
     }
 
     private List<AdapterItem> getListOfStrategies() {
-        List<AdapterItem> items = new ArrayList<AdapterItem>();
+        List<AdapterItem> items = new ArrayList<>();
         items.add(new AdapterItem(Strategy.RANDOM, getString(R.string.strategy_random)));
         items.add(new AdapterItem(Strategy.NEWEST, getString(R.string.strategy_newest)));
         items.add(new AdapterItem(Strategy.LEAST_KNOWN, getString(R.string.strategy_least_known)));

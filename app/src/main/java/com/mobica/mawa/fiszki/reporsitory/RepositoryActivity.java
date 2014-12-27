@@ -31,9 +31,9 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     private static final String FRAGMENT = "FRAGMENT";
     private static final String DICTIONARY = "DICTIONARY";
     @Inject
-    FiszkiDao fiszkiDao;
+    private FiszkiDao fiszkiDao;
     @Inject
-    RestAdapter restAdapter;
+    private RestAdapter restAdapter;
     private RepositoryFragment currentFragment = RepositoryFragment.DictionariesList;
     private int dictionaryId = 0;
     private boolean isSinglePane = true;
@@ -148,12 +148,6 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     public void showWords(int dictionaryId) {
         currentFragment = RepositoryFragment.WordsList;
         this.dictionaryId = dictionaryId;
-
-        if (!isSinglePane) {
-
-            DictionariesListFragment dlf = (DictionariesListFragment) getFragmentManager().findFragmentById(R.id.fragment_large_dictionaries);
-            dlf.highlightDictionary(dictionaryId);
-        }
 
         getFragmentManager().beginTransaction().
                 replace(R.id.container, WordsListFragment.newInstance(dictionaryId))

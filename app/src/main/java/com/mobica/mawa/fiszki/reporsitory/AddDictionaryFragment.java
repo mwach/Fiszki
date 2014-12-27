@@ -56,11 +56,11 @@ public class AddDictionaryFragment extends RoboFragment {
 
     }
 
-    public Repository getRepository() {
+    Repository getRepository() {
         return repository;
     }
 
-    public void setRepository(Repository repository) {
+    void setRepository(Repository repository) {
         this.repository = repository;
     }
 

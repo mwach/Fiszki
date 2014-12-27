@@ -82,14 +82,14 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
         showDictionaries();
     }
 
-    public void showDictionaries(){
+    public void showDictionaries() {
         int baseLanguage = getRepository().getBaseLanguage();
         int refLanguage = getRepository().getRefLanguage();
 
         List<Dictionary> dictionaries = getRepository().getDictionaries(baseLanguage, refLanguage);
 
-        List<Integer> ids = new ArrayList<Integer>();
-        List<String> values = new ArrayList<String>();
+        List<Integer> ids = new ArrayList<>();
+        List<String> values = new ArrayList<>();
         for (Dictionary dict : dictionaries) {
             values.add(dict.getName());
             ids.add(dict.getId());
@@ -123,9 +123,5 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
     @Override
     public void buttonClicked(int position) {
         repository.deleteDictionary(position);
-    }
-
-    public void highlightDictionary(int dictionaryId) {
-        //TODO: highlight selected dictionary in multi-tab mode
     }
 }

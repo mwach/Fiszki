@@ -9,9 +9,9 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "language")
 public class Language {
 
-    public static final String ID = "id";
     public static final String NAME = "name";
-    public static final String DESC = "desc";
+    private static final String ID = "id";
+    private static final String DESC = "desc";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;

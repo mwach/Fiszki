@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appName">Fiszki</string>
     <string name="defaultNoOfQuestions">20</string>
-    -<string name="endpointURL">http://10.0.2.2:8080/fiszki/rest</string>
+    -
+    <string name="endpointURL">http://10.0.2.2:8080/fiszki/rest</string>
     <!--<string name="endpointURL">http://192.168.1.19:8080/fiszki/rest</string>-->
 </resources>

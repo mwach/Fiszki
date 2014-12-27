@@ -1,9 +1,7 @@
 package com.mobica.mawa.fiszki.reporsitory;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import com.mobica.mawa.fiszki.R;
 import com.mobica.mawa.fiszki.common.AlertHelper;
@@ -12,8 +10,8 @@ import com.mobica.mawa.fiszki.dao.bean.Dictionary;
 import com.mobica.mawa.fiszki.dao.bean.Language;
 import com.mobica.mawa.fiszki.dao.bean.Word;
 import com.mobica.mawa.fiszki.helper.NetworkHelper;
-import com.mobica.mawa.fiszki.helper.ObjectHelper;
 import com.mobica.mawa.fiszki.helper.PreferencesHelper;
+import com.mobica.mawa.fiszki.quiz.Strategy;
 import com.mobica.mawa.fiszki.rest.DictionariesService;
 import com.mobica.mawa.fiszki.rest.RestAdapter;
 import com.mobica.mawa.fiszki.rest.dto.Dictionaries;
@@ -57,7 +55,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
             currentFragment = RepositoryFragment.valueOf(savedInstanceState.getString(FRAGMENT));
             dictionaryId = savedInstanceState.getInt(DICTIONARY);
         }
-        if(isSinglePane) {
+        if (isSinglePane) {
             switch (currentFragment) {
                 case AddDictionary:
                     showAddDictionary();
@@ -88,11 +86,11 @@ public class RepositoryActivity extends RoboActivity implements Repository {
 
     public void showDictionaries() {
         currentFragment = RepositoryFragment.DictionariesList;
-        if(isSinglePane) {
+        if (isSinglePane) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, DictionariesListFragment.newInstance())
                     .commit();
-        }else{
+        } else {
             refreshDictionaries();
             showWords(dictionaryId);
 
@@ -101,7 +99,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
 
     @Override
     public void refreshDictionaries() {
-        if(!isSinglePane) {
+        if (!isSinglePane) {
             DictionariesListFragment dlf = (DictionariesListFragment) getFragmentManager().findFragmentById(R.id.fragment_large_dictionaries);
             dlf.showDictionaries();
         }
@@ -151,15 +149,15 @@ public class RepositoryActivity extends RoboActivity implements Repository {
         currentFragment = RepositoryFragment.WordsList;
         this.dictionaryId = dictionaryId;
 
-        if(!isSinglePane) {
+        if (!isSinglePane) {
 
-            DictionariesListFragment dlf = (DictionariesListFragment)getFragmentManager().findFragmentById(R.id.fragment_large_dictionaries);
+            DictionariesListFragment dlf = (DictionariesListFragment) getFragmentManager().findFragmentById(R.id.fragment_large_dictionaries);
             dlf.highlightDictionary(dictionaryId);
         }
 
         getFragmentManager().beginTransaction().
-                    replace(R.id.container, WordsListFragment.newInstance(dictionaryId))
-                    .commit();
+                replace(R.id.container, WordsListFragment.newInstance(dictionaryId))
+                .commit();
     }
 
     @Override
@@ -259,7 +257,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     @Override
     public List<Word> getWords(int dictionary) {
         try {
-            return fiszkiDao.getWordDao().enumerate(dictionary);
+            return fiszkiDao.getWordDao().enumerate(null, dictionary, Strategy.RANDOM);
         } catch (SQLException e) {
             Log.e(RepositoryActivity.class.getName(), "getWords", e);
             AlertHelper.showError(RepositoryActivity.this, getString(R.string.couldNotRetrieveWords));

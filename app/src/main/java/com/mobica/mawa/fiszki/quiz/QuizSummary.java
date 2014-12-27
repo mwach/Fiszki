@@ -22,6 +22,7 @@ import roboguice.inject.InjectView;
 public class QuizSummary extends RoboFragment {
 
     static final String DICTIONARY_ID = "DICTIONARY_ID";
+    static final String STRATEGY = "STRATEGY";
     static final String NO_OF_QUESTIONS = "NO_OF_QUESTIONS";
     static final String CORRECT_ANSWERS = "CORRECT_ANSWERS";
     static final String RATIO = "RATIO";
@@ -57,7 +58,7 @@ public class QuizSummary extends RoboFragment {
         reRunQuizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                quiz.startQuiz(totalQuestions, getArguments().getInt(DICTIONARY_ID));
+                quiz.startQuiz(totalQuestions, getArguments().getInt(DICTIONARY_ID), getArguments().getInt(STRATEGY));
             }
         });
     }

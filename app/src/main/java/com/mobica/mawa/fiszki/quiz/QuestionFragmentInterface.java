@@ -9,8 +9,6 @@ public interface QuestionFragmentInterface {
     static final String CURRENT_QUESTION_ID = "CURRENT_QUESTION_ID";
     static final String CURRENT_WORD = "CURRENT_WORD";
 
-    int getCurrentQuestionId();
-
     void setCurrentQuestionId(int currentQuestionId);
 
     void setCurrentWord(String word);

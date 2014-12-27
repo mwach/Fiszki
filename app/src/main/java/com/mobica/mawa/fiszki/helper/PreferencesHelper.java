@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mobica.mawa.fiszki.R;
+import com.mobica.mawa.fiszki.quiz.Strategy;
 
 /**
  * Created by mawa on 2014-10-19.
@@ -14,6 +15,7 @@ public final class PreferencesHelper {
     public static final String REF_LANGUAGE = "REF_LANGUAGE";
     public static final String QUIZ_NO_OF_QUESTIONS = "NO_OF_QUESTIONS";
     public static final String SERVER_URL = "SERVER_URL";
+    public static final String STRATEGY = "STRATEGY";
 
     private PreferencesHelper() {
     }
@@ -34,6 +36,11 @@ public final class PreferencesHelper {
         return sharedPref.getString(SERVER_URL, defaultUrl);
     }
 
+    public static int getStrategy(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+        int defStrategy = Strategy.RANDOM;
+        return sharedPref.getInt(STRATEGY, defStrategy);
+    }
 
     public static int getNumberOfQuestions(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);

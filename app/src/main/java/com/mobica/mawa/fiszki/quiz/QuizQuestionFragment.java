@@ -22,8 +22,8 @@ public class QuizQuestionFragment extends RoboFragment implements QuestionFragme
     Button quizResponseButton;
     @InjectView(R.id.quizWordTextView)
     TextView quizWordTextView;
+
     private int numberOfQuestions = 0;
-    private int currentQuestionId = 0;
 
     public QuizQuestionFragment() {
         // Required empty public constructor
@@ -44,19 +44,28 @@ public class QuizQuestionFragment extends RoboFragment implements QuestionFragme
             setCurrentQuestionId(getArguments().getInt(QuestionFragmentInterface.CURRENT_QUESTION_ID));
             setCurrentWord(getArguments().getString(QuestionFragmentInterface.CURRENT_WORD));
         }
+        quizResponseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showResponse();
+            }
+        });
     }
 
-    @Override
-    public int getCurrentQuestionId() {
-        return currentQuestionId;
+    private void showResponse() {
+        quizResponseTextView.setVisibility(View.VISIBLE);
+        quizResponseButton.setVisibility(View.GONE);
+    }
+
+    private void hideResponse() {
+        quizResponseTextView.setVisibility(View.GONE);
+        quizResponseButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void setCurrentQuestionId(int currentQuestionId) {
-        this.currentQuestionId = currentQuestionId;
         quizQuestionStatusTextView.setText(String.format("Question %d of %d", (currentQuestionId + 1), numberOfQuestions));
-        quizResponseTextView.setVisibility(View.INVISIBLE);
-        quizResponseButton.setVisibility(View.VISIBLE);
+        hideResponse();
     }
 
     @Override
@@ -67,7 +76,5 @@ public class QuizQuestionFragment extends RoboFragment implements QuestionFragme
     @Override
     public void setCurrentWordResponse(String wordResponse) {
         quizResponseTextView.setText(wordResponse);
-        quizResponseTextView.setVisibility(View.VISIBLE);
-        quizResponseButton.setVisibility(View.GONE);
     }
 }

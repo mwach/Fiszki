@@ -25,7 +25,7 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
 
     public DefaultArrayAdapter(Context context, List<Integer> ids, List<String> values,
                                AdapterClickListener adapterClickListener) {
-        super(context, R.layout.rowlayout, values);
+        super(context, R.layout.dictionary_row_layout, values);
         this.context = context;
         this.ids = ids;
         this.values = values;
@@ -36,7 +36,7 @@ public class DefaultArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
+        final View rowView = inflater.inflate(R.layout.dictionary_row_layout, parent, false);
 
         setRowBackgroundColor(rowView, position);
 

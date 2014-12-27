@@ -1,5 +1,5 @@
 #
-# generated on 2014/12/21 06:06:15
+# generated on 2014/12/26 02:06:57
 #
 # --table-start--
 dataClass=com.mobica.mawa.fiszki.dao.bean.Language
@@ -63,6 +63,11 @@ canBeNull=false
 foreign=true
 columnDefinition=integer references language(id) on delete cascade
 # --field-end--
+# --field-start--
+fieldName=added
+columnName=added
+canBeNull=false
+# --field-end--
 # --table-fields-end--
 # --table-end--
 #################################
@@ -91,6 +96,27 @@ canBeNull=false
 fieldName=refWord
 columnName=ref_word
 canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=added
+columnName=added
+canBeNull=false
+# --field-end--
+# --field-start--
+fieldName=known
+columnName=known
+# --field-end--
+# --field-start--
+fieldName=unknown
+columnName=unknown
+# --field-end--
+# --field-start--
+fieldName=lastKnown
+columnName=last_known
+# --field-end--
+# --field-start--
+fieldName=lastUnknown
+columnName=last_unknown
 # --field-end--
 # --table-fields-end--
 # --table-end--

@@ -73,4 +73,10 @@
     <string name="dbNotPopulated">No init data</string>
     <string name="dbNotPopulatedMessage">No data available in the database. Please go to \'Settings\' and verify it</string>
     <string name="download_languages">Click \'Download\' button in order to download init data</string>
+    <string name="strategy">Strategy</string>
+    <string name="strategy_random">Random</string>
+    <string name="strategy_newest">Newest</string>
+    <string name="strategy_least_known">Least known</string>
+    <string name="dictionaries_all">[ALL]</string>
+    <string name="quizResultSaveFailed">Could not store quiz results in the database</string>
 </resources>

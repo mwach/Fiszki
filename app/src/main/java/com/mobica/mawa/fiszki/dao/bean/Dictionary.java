@@ -15,6 +15,7 @@ public class Dictionary {
     public static final String UUID = "uuid";
     public static final String BASE_LANG = "base_lang";
     public static final String REF_LANG = "ref_lang";
+    public static final String ADDED = "added";
 
     @DatabaseField(generatedId = true, columnName = ID)
     private int id;
@@ -28,8 +29,11 @@ public class Dictionary {
     private Language baseLanguage;
     @DatabaseField(canBeNull = false, foreign = true, columnName = REF_LANG, columnDefinition = "integer references language(id) on delete cascade")
     private Language refLanguage;
+    @DatabaseField(columnName = ADDED, canBeNull = false)
+    private long added;
 
     public Dictionary() {
+        setAdded(System.currentTimeMillis());
     }
 
     public Dictionary(int id, String name, String uuid, String description, Language baseLanguage, Language refLanguage) {
@@ -90,6 +94,14 @@ public class Dictionary {
         this.refLanguage = refLanguage;
     }
 
+    public long getAdded() {
+        return added;
+    }
+
+    public void setAdded(long added) {
+        this.added = added;
+    }
+
     @Override
     public String toString() {
         return "Dictionary{" +
@@ -99,6 +111,7 @@ public class Dictionary {
                 "uuid='" + uuid + '\'' +
                 "baseLanguage='" + baseLanguage + '\'' +
                 "refLanguage='" + refLanguage + '\'' +
+                "added='" + added + '\'' +
                 '}';
     }
 }

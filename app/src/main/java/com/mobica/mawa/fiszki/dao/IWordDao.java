@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface IWordDao extends Crud<Word> {
 
-    public List<Word> enumerate(int dictionaryId) throws SQLException;
+    public List<Word> enumerate(Long limit, Integer dictionaryId, Integer strategy) throws SQLException;
 
     public void create(List<Word> dbWords) throws SQLException;
+
+    public void update(List<Word> dbWords) throws SQLException;
 }

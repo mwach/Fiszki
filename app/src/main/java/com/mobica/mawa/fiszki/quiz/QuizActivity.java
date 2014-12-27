@@ -24,8 +24,10 @@ import roboguice.activity.RoboActivity;
 
 public class QuizActivity extends RoboActivity implements QuizInterface {
 
+    int currentQuestion = 0;
     int correctAnswers = 0;
     int dictionaryId = 0;
+    int strategy = Strategy.RANDOM;
     QuestionFragmentInterface quizQuestionFragment = new QuizQuestionFragment();
     List<Word> dbWords = null;
 
@@ -49,12 +51,22 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         }
     }
 
-    public void startQuiz(int noOfQuestions, int dictionaryId) {
+    public void startQuiz(int noOfQuestions, int dictionaryId, int strategy) {
 
         this.dictionaryId = dictionaryId;
+        this.strategy = strategy;
+        this.correctAnswers = 0;
+        this.currentQuestion = 0;
+
         PreferencesHelper.setProperty(this, PreferencesHelper.QUIZ_NO_OF_QUESTIONS, noOfQuestions);
+        PreferencesHelper.setProperty(this, PreferencesHelper.STRATEGY, strategy);
+
         try {
-            dbWords = fiszkiDao.getWordDao().enumerate(dictionaryId);
+            dbWords = fiszkiDao.getWordDao().enumerate(
+                    (long) noOfQuestions,
+                    dictionaryId == QuizInterface.UNDEFINED_DICTIONARY ? null : dictionaryId,
+                    strategy
+            );
         } catch (SQLException e) {
             Log.e(QuizActivity.class.getName(), "startQuiz", e);
             AlertHelper.showError(this, getString(R.string.couldNotRetrieveWords));
@@ -65,7 +77,6 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         }
 
         dbWords = filterWords(dbWords, noOfQuestions);
-        correctAnswers = 0;
 
         Bundle bundle = new Bundle();
         bundle.putInt(QuestionFragmentInterface.NO_OF_QUESTIONS, dbWords.size());
@@ -80,6 +91,9 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
 
     private List<Word> filterWords(List<Word> dbWords, int limit) {
 
+        if (dbWords.size() == limit) {
+            return dbWords;
+        }
         List<Word> response = new ArrayList<Word>();
         //, noOfQuestions
         Random random = new Random();
@@ -90,24 +104,36 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
     }
 
 
-    public void showAnswer(View view) {
-        quizQuestionFragment.setCurrentWordResponse(dbWords.get(quizQuestionFragment.getCurrentQuestionId()).getRefWord());
-
-    }
-
     public void answerKnown(View view) {
         correctAnswers++;
+        dbWords.get(currentQuestion).incKnown();
+        dbWords.get(currentQuestion).setLastKnown(System.currentTimeMillis());
+        showNextWord();
+    }
+
+    public void answerUnknown(View view) {
+        dbWords.get(currentQuestion).incUnknown();
+        dbWords.get(currentQuestion).setLastUnknown(System.currentTimeMillis());
         showNextWord();
     }
 
     private void showNextWord() {
-        int wordId = quizQuestionFragment.getCurrentQuestionId();
-        if ((wordId + 1) < dbWords.size()) {
-            wordId++;
-            quizQuestionFragment.setCurrentQuestionId(wordId);
-            quizQuestionFragment.setCurrentWord(dbWords.get(wordId).getBaseWord());
+        if (++currentQuestion < dbWords.size()) {
+            quizQuestionFragment.setCurrentQuestionId(currentQuestion);
+            quizQuestionFragment.setCurrentWord(dbWords.get(currentQuestion).getBaseWord());
+            quizQuestionFragment.setCurrentWordResponse(dbWords.get(currentQuestion).getRefWord());
         } else {
+            persistQuizResults(dbWords);
             showTestSummary();
+        }
+    }
+
+    private void persistQuizResults(List<Word> dbWords) {
+        try {
+            fiszkiDao.getWordDao().update(dbWords);
+        } catch (SQLException e) {
+            Log.e(QuizActivity.class.getName(), "Could not update DB with test results", e);
+            AlertHelper.showError(QuizActivity.this, getString(R.string.quizResultSaveFailed));
         }
     }
 
@@ -117,15 +143,12 @@ public class QuizActivity extends RoboActivity implements QuizInterface {
         bundle.putInt(QuizSummary.CORRECT_ANSWERS, correctAnswers);
         bundle.putInt(QuizSummary.NO_OF_QUESTIONS, dbWords.size());
         bundle.putInt(QuizSummary.DICTIONARY_ID, dictionaryId);
+        bundle.putInt(QuizSummary.STRATEGY, strategy);
         bundle.putInt(QuizSummary.RATIO, (100 * correctAnswers / dbWords.size()));
         quizSummary.setArguments(bundle);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, quizSummary)
                 .commit();
-    }
-
-    public void answerUnknown(View view) {
-        showNextWord();
     }
 
     public int getBaseLanguage() {

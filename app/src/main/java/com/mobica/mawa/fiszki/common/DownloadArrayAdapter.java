@@ -25,7 +25,7 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
 
     public DownloadArrayAdapter(Context context, List<Dictionary> dictionaries,
                                 DownloadAdapterClickListener adapterClickListener) {
-        super(context, R.layout.downloadrowlayout, dictionaries);
+        super(context, R.layout.download_row_layout, dictionaries);
         this.context = context;
         this.dictionaries = dictionaries;
         this.adapterClickListener = adapterClickListener;
@@ -35,7 +35,7 @@ public class DownloadArrayAdapter extends ArrayAdapter<Dictionary> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.downloadrowlayout, parent, false);
+        final View rowView = inflater.inflate(R.layout.download_row_layout, parent, false);
 
         setRowBackgroundColor(rowView, position);
 

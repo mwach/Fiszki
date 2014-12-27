@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * DAO class for @Word
- *   Created by mawa on 2014-10-18.
+ * Created by mawa on 2014-10-18.
  */
 class WordDao extends AbstractDao<Word> implements IWordDao {
 
@@ -42,8 +42,7 @@ class WordDao extends AbstractDao<Word> implements IWordDao {
                 break;
         }
         PreparedQuery<Word> preparedQuery = qb.prepare();
-        List<Word> dbWords = getDao().query(preparedQuery);
-        return dbWords;
+        return getDao().query(preparedQuery);
     }
 
     @Override

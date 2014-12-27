@@ -46,7 +46,6 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     @Inject
     FiszkiDao fiszkiDao;
 
-    private Dictionaries dictionaries;
     private Context context;
     private Repository repository;
 
@@ -78,7 +77,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dictionaries = getArguments().getParcelable(DICT_KEY);
+        Dictionaries dictionaries = getArguments().getParcelable(DICT_KEY);
 
         DownloadArrayAdapter adapter = new DownloadArrayAdapter(getActivity(), dictionaries.dictionaries, this);
         dictionariesListView.setAdapter(adapter);
@@ -89,7 +88,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.context = activity;
-        this.repository = (Repository)activity;
+        this.repository = (Repository) activity;
     }
 
     @Override
@@ -119,7 +118,7 @@ public class WebDictionariesFragment extends RoboFragment implements DownloadAda
         });
     }
 
-    private void addDictionary(Dictionary dictionary, List<com.mobica.mawa.fiszki.rest.dto.Word> words) throws SQLException{
+    private void addDictionary(Dictionary dictionary, List<com.mobica.mawa.fiszki.rest.dto.Word> words) throws SQLException {
         Language baseLanguage = fiszkiDao.getLanguageDao().getBaseLanguage();
         Language refLanguage = fiszkiDao.getLanguageDao().getRefLanguage();
         com.mobica.mawa.fiszki.dao.bean.Dictionary dbDictionary = ObjectHelper.fromDictionaryDto(dictionary, baseLanguage, refLanguage);

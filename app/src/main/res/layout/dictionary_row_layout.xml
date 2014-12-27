@@ -9,15 +9,21 @@
         android:id="@+id/rowlayoutTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/rowlayoutImageButton"
+        android:layout_toStartOf="@+id/rowlayoutImageButton"
         android:textSize="@dimen/activity_word_small_size_xx" />
 
     <ImageButton
         android:id="@+id/rowlayoutImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/activity_margin_6"
+        android:layout_marginStart="@dimen/activity_margin_6"
         android:background="@null"
         android:contentDescription="@string/remove"
         android:src="@drawable/remove" />

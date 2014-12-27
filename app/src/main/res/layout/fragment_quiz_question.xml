@@ -61,7 +61,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/activity_triple_vertical_margin"
         android:background="@drawable/buttonshape"
-        android:onClick="showAnswer"
         android:text="@string/showAnswerButton"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/activity_word_small_size" />

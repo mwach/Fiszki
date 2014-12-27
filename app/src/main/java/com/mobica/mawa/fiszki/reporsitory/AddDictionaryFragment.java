@@ -3,8 +3,6 @@ package com.mobica.mawa.fiszki.reporsitory;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

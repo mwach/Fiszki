@@ -1,7 +1,6 @@
 package com.mobica.mawa.fiszki;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -91,7 +90,7 @@ public class SettingsActivity extends RoboActivity {
         editTextServerUrl.setText(serverURL);
         editTextServerUrl.addTextChangedListener(new EditTextListener(this, PreferencesHelper.SERVER_URL));
 
-        if(languages.isEmpty()){
+        if (languages.isEmpty()) {
             AlertHelper.showInfo(SettingsActivity.this, getString(R.string.dbNotPopulated), getString(R.string.download_languages));
         }
     }
@@ -124,7 +123,7 @@ public class SettingsActivity extends RoboActivity {
 
     private void refresh() {
 
-        if (!NetworkHelper.isNetworkAvailable(this)) {
+        if (NetworkHelper.isNetworkDisabled(this)) {
             AlertHelper.showInfo(SettingsActivity.this,
                     SettingsActivity.this.getString(R.string.networkDisabled),
                     SettingsActivity.this.getString(R.string.pleaseEnableNetwork));

@@ -23,17 +23,17 @@
         <activity
             android:name=".quiz.QuizActivity"
             android:label="@string/title_activity_quiz"
-            android:theme="@style/FiszkiTheme"></activity>
+            android:theme="@style/FiszkiTheme" />
         <activity
             android:name=".reporsitory.RepositoryActivity"
             android:label="@string/dictionaries"
-            android:theme="@style/FiszkiTheme"></activity>
+            android:theme="@style/FiszkiTheme" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_about"></activity>
+            android:label="@string/title_activity_about" />
     </application>
 
 </manifest>

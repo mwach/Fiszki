@@ -108,7 +108,7 @@ public class RepositoryActivity extends RoboActivity implements Repository {
     @Override
     public void showDownloadDictionaries() {
         currentFragment = RepositoryFragment.DownloadDictionaries;
-        if (!NetworkHelper.isNetworkAvailable(this)) {
+        if (NetworkHelper.isNetworkDisabled(this)) {
             AlertHelper.showInfo(RepositoryActivity.this,
                     RepositoryActivity.this.getString(R.string.networkDisabled),
                     RepositoryActivity.this.getString(R.string.pleaseEnableNetwork));

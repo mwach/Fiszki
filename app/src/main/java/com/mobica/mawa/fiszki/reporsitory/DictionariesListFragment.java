@@ -126,9 +126,6 @@ public class DictionariesListFragment extends RoboFragment implements AdapterCli
     }
 
     public void highlightDictionary(int dictionaryId) {
-        DefaultArrayAdapter daa = (DefaultArrayAdapter)dictionariesListView.getAdapter();
-        for(int i=0; i <daa.getCount() ; i++){
-            String item = daa.getItem(i);
-        }
+        //TODO: highlight selected dictionary in multi-tab mode
     }
 }

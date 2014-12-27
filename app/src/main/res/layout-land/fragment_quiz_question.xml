@@ -11,8 +11,8 @@
         android:id="@+id/quizQuestionStatusTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/activity_word_small_size_xx"
-        android:text="" />
+        android:text=""
+        android:textSize="@dimen/activity_word_small_size_xx" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -23,35 +23,35 @@
         <TextView
             android:id="@+id/quizWordTextView"
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:gravity="center"
             android:text=""
             android:textSize="@dimen/activity_word_size" />
 
-            <ImageButton
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:background="@color/green"
-                android:contentDescription="@string/quizKnownResponse"
-                android:onClick="answerKnown"
-                android:src="@drawable/ok" />
+        <ImageButton
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:contentDescription="@string/quizKnownResponse"
+            android:onClick="answerKnown"
+            android:src="@drawable/ok" />
 
-            <ImageButton
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_weight="1"
-                android:background="@color/red"
-                android:contentDescription="@string/quizUnknownResponse"
-                android:onClick="answerUnknown"
-                android:src="@drawable/cancel" />
+        <ImageButton
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:background="@color/red"
+            android:contentDescription="@string/quizUnknownResponse"
+            android:onClick="answerUnknown"
+            android:src="@drawable/cancel" />
 
     </LinearLayout>
 
@@ -60,28 +60,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/quizResponseButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/buttonshape"
-        android:onClick="showAnswer"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/showAnswerButton"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/activity_word_small_size" />
+        <Button
+            android:id="@+id/quizResponseButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@drawable/buttonshape"
+            android:text="@string/showAnswerButton"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/activity_word_small_size" />
 
-    <TextView
-        android:id="@+id/quizResponseTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=""
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/activity_word_size"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/quizResponseTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:gravity="center"
+            android:text=""
+            android:textSize="@dimen/activity_word_size"
+            android:visibility="gone" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -11,9 +11,9 @@ public final class NetworkHelper {
     private NetworkHelper() {
     }
 
-    public static boolean isNetworkAvailable(Context context) {
+    public static boolean isNetworkDisabled(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected());
+        return (cm.getActiveNetworkInfo() == null || !cm.getActiveNetworkInfo().isAvailable() || !cm.getActiveNetworkInfo().isConnected());
     }
 
 }

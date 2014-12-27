@@ -51,11 +51,11 @@ public final class PreferencesHelper {
 
     public static void setProperty(Context context, String propertyName, String propertyValue) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        sharedPref.edit().putString(propertyName, propertyValue).commit();
+        sharedPref.edit().putString(propertyName, propertyValue).apply();
     }
 
     public static void setProperty(Context context, String propertyName, int propertyValue) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-        sharedPref.edit().putInt(propertyName, propertyValue).commit();
+        sharedPref.edit().putInt(propertyName, propertyValue).apply();
     }
 }
